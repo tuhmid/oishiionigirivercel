@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OISHIIONIGIRI — Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Serif+JP:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ── Style Guide only ── */
+    .sg-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 10px var(--gutter);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-6);
+      overflow-x: auto;
+      scrollbar-width: none;
+      white-space: nowrap;
+    }
+    .sg-nav::-webkit-scrollbar { display: none; }
+    .sg-nav-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      color: var(--red);
+      flex-shrink: 0;
+      margin-right: var(--sp-4);
+    }
+    .sg-nav a {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(250,248,243,0.5);
+      transition: color 150ms ease;
+      flex-shrink: 0;
+    }
+    .sg-nav a:hover { color: var(--paper); }
+
+    .sg-section {
+      padding: var(--sp-16) var(--gutter);
+      max-width: 1100px;
+      margin-inline: auto;
+    }
+
+    .sg-section + .sg-section {
+      border-top: 1.5px solid var(--border);
+    }
+
+    .sg-heading {
+      display: flex;
+      align-items: baseline;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-10);
+    }
+    .sg-heading-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink-20);
+      letter-spacing: 0.1em;
+    }
+    .sg-heading-text {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 3vw, 28px);
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .sg-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-3);
+      align-items: flex-start;
+    }
+
+    .sg-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-2);
+    }
+
+    .sg-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-20);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Color swatch */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: var(--sp-3);
+    }
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-2);
+    }
+    .swatch-color {
+      height: 72px;
+      border-radius: var(--radius-xs);
+      border: 1px solid rgba(0,0,0,0.07);
+    }
+    .swatch-name {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-40);
+      font-weight: 700;
+    }
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-20);
+    }
+
+    /* Type specimen */
+    .type-row {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-1);
+      padding-block: var(--sp-5);
+      border-bottom: 1px solid var(--border);
+    }
+    .type-row:last-child { border-bottom: none; }
+    .type-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-20);
+      margin-bottom: var(--sp-2);
+    }
+
+    /* Spacing scale */
+    .space-row {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-3);
+    }
+    .space-bar {
+      height: 8px;
+      background: var(--red);
+      border-radius: 2px;
+    }
+    .space-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-40);
+      white-space: nowrap;
+    }
+
+    /* Fullscreen sections */
+    .sg-hero-preview {
+      min-height: 70vh;
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-16) var(--gutter);
+    }
+
+    .sg-dark {
+      background: var(--ink);
+    }
+    .sg-dark .sg-heading-text { color: var(--paper); }
+    .sg-dark .sg-heading-num  { color: rgba(250,248,243,0.2); }
+
+    /* Grid demo */
+    .grid-demo-cell {
+      background: var(--paper-tint);
+      border: 1.5px solid var(--border);
+      padding: var(--sp-4);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-40);
+      text-align: center;
+      letter-spacing: 0.1em;
+    }
+
+    /* Form preview layout */
+    .form-preview {
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-5);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Sticky style guide nav ── -->
+  <nav class="sg-nav">
+    <span class="sg-nav-title">OISHII / DS</span>
+    <a href="#brand">Brand</a>
+    <a href="#color">Color</a>
+    <a href="#typography">Type</a>
+    <a href="#spacing">Spacing</a>
+    <a href="#buttons">Buttons</a>
+    <a href="#forms">Forms</a>
+    <a href="#badges">Badges</a>
+    <a href="#cards">Cards</a>
+    <a href="#nav">Nav</a>
+    <a href="#animation">Motion</a>
+    <a href="#hero">Hero</a>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       01 — BRAND IDENTITY
+       ═══════════════════════════════════════════════════════ -->
+  <section id="brand" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">01</span>
+      <span class="sg-heading-text">Brand Identity</span>
+    </div>
+
+    <!-- Mascot + wordmark -->
+    <div class="sg-row" style="align-items: center; gap: 48px; margin-bottom: 64px; flex-wrap: wrap;">
+
+      <!-- Mascot sizes -->
+      <div class="sg-block">
+        <span class="sg-label">Mascot — Sizes</span>
+        <div style="display:flex; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-top:12px;">
+          <!-- XS -->
+          <div class="sg-block" style="align-items:center;">
+            <svg class="mascot mascot-sm" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="#FAF8F3" stroke="#0A0A0A" stroke-width="4" stroke-linejoin="round"/>
+              <rect x="12" y="70" width="76" height="30" rx="0" fill="#1E3A1E"/>
+              <path d="M12 70 L88 70 L88 78 C88 78 72 80 50 80 C28 80 12 78 12 78 Z" fill="#0A0A0A" opacity="0.15"/>
+              <circle cx="38" cy="54" r="4.5" fill="#0A0A0A"/>
+              <circle cx="62" cy="54" r="4.5" fill="#0A0A0A"/>
+              <circle cx="39.5" cy="52.5" r="1.5" fill="white"/>
+              <circle cx="63.5" cy="52.5" r="1.5" fill="white"/>
+              <path d="M41 65 Q50 72 59 65" stroke="#0A0A0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <rect x="22" y="78" width="12" height="4" rx="2" fill="#2D5A2D" opacity="0.6"/>
+              <rect x="42" y="76" width="16" height="4" rx="2" fill="#2D5A2D" opacity="0.4"/>
+            </svg>
+            <span class="sg-label" style="margin-top:4px;">48px</span>
+          </div>
+
+          <!-- MD -->
+          <div class="sg-block" style="align-items:center;">
+            <svg class="mascot mascot-md mascot-animate" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="#FAF8F3" stroke="#0A0A0A" stroke-width="4" stroke-linejoin="round"/>
+              <rect x="12" y="70" width="76" height="30" rx="0" fill="#1E3A1E"/>
+              <path d="M12 70 L88 70 L88 78 C88 78 72 80 50 80 C28 80 12 78 12 78 Z" fill="#0A0A0A" opacity="0.15"/>
+              <circle cx="38" cy="54" r="4.5" fill="#0A0A0A"/>
+              <circle cx="62" cy="54" r="4.5" fill="#0A0A0A"/>
+              <circle cx="39.5" cy="52.5" r="1.5" fill="white"/>
+              <circle cx="63.5" cy="52.5" r="1.5" fill="white"/>
+              <path d="M41 65 Q50 72 59 65" stroke="#0A0A0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <rect x="22" y="78" width="12" height="4" rx="2" fill="#2D5A2D" opacity="0.6"/>
+              <rect x="42" y="76" width="16" height="4" rx="2" fill="#2D5A2D" opacity="0.4"/>
+            </svg>
+            <span class="sg-label" style="margin-top:4px;">80px ↑ floating</span>
+          </div>
+
+          <!-- LG -->
+          <div class="sg-block" style="align-items:center;">
+            <svg class="mascot mascot-lg" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="#FAF8F3" stroke="#0A0A0A" stroke-width="4" stroke-linejoin="round"/>
+              <rect x="12" y="70" width="76" height="30" rx="0" fill="#1E3A1E"/>
+              <path d="M12 70 L88 70 L88 78 C88 78 72 80 50 80 C28 80 12 78 12 78 Z" fill="#0A0A0A" opacity="0.15"/>
+              <circle cx="38" cy="54" r="4.5" fill="#0A0A0A"/>
+              <circle cx="62" cy="54" r="4.5" fill="#0A0A0A"/>
+              <circle cx="39.5" cy="52.5" r="1.5" fill="white"/>
+              <circle cx="63.5" cy="52.5" r="1.5" fill="white"/>
+              <path d="M41 65 Q50 72 59 65" stroke="#0A0A0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <rect x="22" y="78" width="12" height="4" rx="2" fill="#2D5A2D" opacity="0.6"/>
+              <rect x="42" y="76" width="16" height="4" rx="2" fill="#2D5A2D" opacity="0.4"/>
+            </svg>
+            <span class="sg-label" style="margin-top:4px;">140px</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wordmark compositions -->
+      <div class="sg-block" style="gap: 24px;">
+        <span class="sg-label">Wordmark Compositions</span>
+
+        <!-- Horizontal -->
+        <div style="display:flex; align-items:center; gap:16px; padding:24px; background:var(--surface); border:1.5px solid var(--border);">
+          <svg width="52" height="58" viewBox="0 0 100 110" fill="none">
+            <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="#FAF8F3" stroke="#0A0A0A" stroke-width="4" stroke-linejoin="round"/>
+            <rect x="12" y="70" width="76" height="30" fill="#1E3A1E"/>
+            <circle cx="38" cy="54" r="4.5" fill="#0A0A0A"/>
+            <circle cx="62" cy="54" r="4.5" fill="#0A0A0A"/>
+            <circle cx="39.5" cy="52.5" r="1.5" fill="white"/>
+            <circle cx="63.5" cy="52.5" r="1.5" fill="white"/>
+            <path d="M41 65 Q50 72 59 65" stroke="#0A0A0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div style="font-family:var(--font-display);font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--ink-40);">DELICIOUS RICE BALLS</div>
+            <div style="font-family:var(--font-display);font-size:26px;letter-spacing:0.04em;line-height:1.05;color:var(--ink);">OISHII
+              <span style="color:var(--red);">ONIGIRI</span>
+            </div>
+            <div style="font-family:var(--font-serif);font-size:12px;color:var(--ink-40);margin-top:2px;">美味しいおにぎり</div>
+          </div>
+        </div>
+
+        <!-- Inverted -->
+        <div style="display:flex; align-items:center; gap:16px; padding:24px; background:var(--ink); border:1.5px solid var(--ink);">
+          <svg width="44" height="49" viewBox="0 0 100 110" fill="none">
+            <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="rgba(250,248,243,0.1)" stroke="#FAF8F3" stroke-width="4" stroke-linejoin="round"/>
+            <rect x="12" y="70" width="76" height="30" fill="#2D5A2D"/>
+            <circle cx="38" cy="54" r="4.5" fill="#FAF8F3"/>
+            <circle cx="62" cy="54" r="4.5" fill="#FAF8F3"/>
+            <path d="M41 65 Q50 72 59 65" stroke="#FAF8F3" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div style="font-family:var(--font-display);font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(250,248,243,0.35);">DELICIOUS RICE BALLS</div>
+            <div style="font-family:var(--font-display);font-size:22px;letter-spacing:0.04em;line-height:1.05;color:var(--paper);">OISHII
+              <span style="color:var(--red);">ONIGIRI</span>
+            </div>
+            <div style="font-family:var(--font-serif);font-size:12px;color:rgba(250,248,243,0.35);margin-top:2px;">美味しいおにぎり</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       02 — COLOR SYSTEM
+       ═══════════════════════════════════════════════════════ -->
+  <section id="color" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">02</span>
+      <span class="sg-heading-text">Color System</span>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:32px;">
+      <!-- Core palette -->
+      <div>
+        <span class="sg-label" style="display:block; margin-bottom:12px;">Core Palette — pulled from label</span>
+        <div class="swatch-grid">
+          <div class="swatch">
+            <div class="swatch-color" style="background:#CC2525;"></div>
+            <div class="swatch-name">Red</div>
+            <div class="swatch-hex">#CC2525</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background:#A81C1C;"></div>
+            <div class="swatch-name">Red Dark</div>
+            <div class="swatch-hex">#A81C1C</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background:#FDF0F0; border:1.5px solid #E2DDD0;"></div>
+            <div class="swatch-name">Red Light</div>
+            <div class="swatch-hex">#FDF0F0</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background:#0A0A0A;"></div>
+            <div class="swatch-name">Ink</div>
+            <div class="swatch-hex">#0A0A0A</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background:#FAF8F3; border:1.5px solid #E2DDD0;"></div>
+            <div class="swatch-name">Paper</div>
+            <div class="swatch-hex">#FAF8F3</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background:#FFFFFF; border:1.5px solid #E2DDD0;"></div>
+            <div class="swatch-name">Surface</div>
+            <div class="swatch-hex">#FFFFFF</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background:#1E3A1E;"></div>
+            <div class="swatch-name">Seaweed</div>
+            <div class="swatch-hex">#1E3A1E</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background:#C4942A;"></div>
+            <div class="swatch-name">Sesame</div>
+            <div class="swatch-hex">#C4942A</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ink scale -->
+      <div>
+        <span class="sg-label" style="display:block; margin-bottom:12px;">Ink Scale</span>
+        <div class="swatch-grid">
+          <div class="swatch"><div class="swatch-color" style="background:#0A0A0A;"></div><div class="swatch-name">Ink</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#2C2C2C;"></div><div class="swatch-name">Ink 80</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#4E4E4E;"></div><div class="swatch-name">Ink 60</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#727272;"></div><div class="swatch-name">Ink 40</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#A0A0A0;"></div><div class="swatch-name">Ink 20</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#C8C8C8;"></div><div class="swatch-name">Ink 10</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#EDE7D6; border:1.5px solid #E2DDD0;"></div><div class="swatch-name">Border</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:#EDE7D6; border:1.5px solid #E2DDD0;"></div><div class="swatch-name">Paper Tint</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       03 — TYPOGRAPHY
+       ═══════════════════════════════════════════════════════ -->
+  <section id="typography" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">03</span>
+      <span class="sg-heading-text">Typography</span>
+    </div>
+
+    <!-- Font stacks -->
+    <div class="sg-row" style="margin-bottom:48px; gap:24px;">
+      <div class="sg-block" style="flex:1; min-width:200px; padding:24px; background:var(--surface); border:1.5px solid var(--border);">
+        <span class="sg-label">Display — Dela Gothic One</span>
+        <div style="font-family:var(--font-display);font-size:clamp(28px,5vw,48px);line-height:1;color:var(--ink);margin-top:12px;">Aa Bb Cc</div>
+        <div style="font-family:var(--font-display);font-size:14px;letter-spacing:0.1em;color:var(--ink-40);margin-top:8px;">OISHII ONIGIRI NYC</div>
+      </div>
+      <div class="sg-block" style="flex:1; min-width:200px; padding:24px; background:var(--surface); border:1.5px solid var(--border);">
+        <span class="sg-label">Serif — Noto Serif JP</span>
+        <div style="font-family:var(--font-serif);font-size:clamp(24px,4vw,40px);font-weight:700;line-height:1.1;color:var(--ink);margin-top:12px;">Teriyaki Salmon</div>
+        <div style="font-family:var(--font-serif);font-size:18px;color:var(--ink-60);margin-top:8px;">美味しいおにぎり</div>
+      </div>
+      <div class="sg-block" style="flex:1; min-width:200px; padding:24px; background:var(--surface); border:1.5px solid var(--border);">
+        <span class="sg-label">Sans — DM Sans</span>
+        <div style="font-family:var(--font-sans);font-size:clamp(20px,3vw,32px);font-weight:400;line-height:1.3;color:var(--ink);margin-top:12px;">Fresh handcrafted rice balls.</div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-40);margin-top:8px;">Space Mono — $4.50 · 3.53 OZ</div>
+      </div>
+    </div>
+
+    <!-- Type scale -->
+    <div>
+      <span class="sg-label" style="display:block; margin-bottom:16px;">Type Scale — Fluid / Responsive</span>
+      <div>
+        <div class="type-row">
+          <div class="type-meta">--text-6xl · Display · Dela Gothic One</div>
+          <div class="t-display" style="font-size:var(--text-6xl);">OISHII</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-5xl · Display</div>
+          <div class="t-display">ONIGIRI</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-4xl · H1 · Dela Gothic One</div>
+          <h1>Teriyaki Salmon</h1>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-3xl · H2 · Noto Serif JP</div>
+          <h2>Handcrafted Rice Balls</h2>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-2xl · H3 · Noto Serif JP</div>
+          <h3>Fresh Every 3–4 Days</h3>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-xl · H4 · DM Sans Bold</div>
+          <h4>Brooklyn, New York City</h4>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-lg · Body Large</div>
+          <p class="t-body-lg">Premium Japanese onigiri made fresh daily. Available at select NYC stores and via direct order.</p>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-base · Body</div>
+          <p class="t-body">Rice, Salmon, Laver, Teriyaki Sauce (Soy Sauce, Sugar, Water), Sesame Seed, Brown Sugar, Salt, Rice Vinegar. Keep refrigerated. Net wt. 3.53 oz (100g).</p>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-sm · Body Small</div>
+          <p class="t-body-sm t-muted">Contains: Fish (Salmon), Sesame, Soy, Wheat. Produced at 276 Chestnut Street, Brooklyn 11208.</p>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-xs · Label · 0.3em tracking</div>
+          <p class="t-label">Handcrafted · New York City · Est. 2024</p>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">--text-sm · Mono · Space Mono</div>
+          <p class="t-mono">SELL BY: 06/28/26 · NET WT. LB · $4.50</p>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">Japanese · Noto Serif JP</div>
+          <p class="t-jp" style="font-size:var(--text-2xl); font-family:var(--font-serif);">美味しいおにぎり</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       04 — SPACING
+       ═══════════════════════════════════════════════════════ -->
+  <section id="spacing" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">04</span>
+      <span class="sg-heading-text">Spacing Scale</span>
+    </div>
+
+    <div style="max-width:500px;">
+      <div class="space-row"><div class="space-bar" style="width:4px;"></div><span class="space-label">--sp-1 · 4px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:8px;"></div><span class="space-label">--sp-2 · 8px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:12px;"></div><span class="space-label">--sp-3 · 12px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:16px;"></div><span class="space-label">--sp-4 · 16px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:20px;"></div><span class="space-label">--sp-5 · 20px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:24px;"></div><span class="space-label">--sp-6 · 24px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:32px;"></div><span class="space-label">--sp-8 · 32px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:48px;"></div><span class="space-label">--sp-12 · 48px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:64px;"></div><span class="space-label">--sp-16 · 64px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:96px;"></div><span class="space-label">--sp-24 · 96px</span></div>
+      <div class="space-row"><div class="space-bar" style="width:128px;"></div><span class="space-label">--sp-32 · 128px</span></div>
+    </div>
+
+    <!-- Grid -->
+    <div style="margin-top:48px;">
+      <span class="sg-label" style="display:block; margin-bottom:16px;">Grid System</span>
+      <div style="display:grid; grid-template-columns: repeat(1,1fr); gap:8px; margin-bottom:16px;">
+        <div class="grid-demo-cell">1 col (mobile)</div>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:8px; margin-bottom:16px;">
+        <div class="grid-demo-cell">col 1</div>
+        <div class="grid-demo-cell">col 2</div>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:8px; margin-bottom:16px;">
+        <div class="grid-demo-cell">col 1</div>
+        <div class="grid-demo-cell">col 2</div>
+        <div class="grid-demo-cell">col 3</div>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:8px;">
+        <div class="grid-demo-cell">col 1</div>
+        <div class="grid-demo-cell">col 2</div>
+        <div class="grid-demo-cell">col 3</div>
+        <div class="grid-demo-cell">col 4</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       05 — BUTTONS
+       ═══════════════════════════════════════════════════════ -->
+  <section id="buttons" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">05</span>
+      <span class="sg-heading-text">Buttons</span>
+    </div>
+
+    <!-- Variants -->
+    <div style="margin-bottom:32px;">
+      <span class="sg-label" style="display:block; margin-bottom:16px;">Variants</span>
+      <div class="sg-row">
+        <div class="sg-block"><span class="sg-label">Primary</span><button class="btn btn-primary">Order Now</button></div>
+        <div class="sg-block"><span class="sg-label">Red / CTA</span><button class="btn btn-red">Add to Cart</button></div>
+        <div class="sg-block"><span class="sg-label">Outline</span><button class="btn btn-outline">View Menu</button></div>
+        <div class="sg-block"><span class="sg-label">Outline Red</span><button class="btn btn-outline-red">Partner With Us</button></div>
+        <div class="sg-block"><span class="sg-label">Ghost</span><button class="btn btn-ghost">Learn More</button></div>
+      </div>
+    </div>
+
+    <!-- Sizes -->
+    <div style="margin-bottom:32px;">
+      <span class="sg-label" style="display:block; margin-bottom:16px;">Sizes</span>
+      <div class="sg-row" style="align-items: flex-end;">
+        <div class="sg-block"><span class="sg-label">SM</span><button class="btn btn-red btn-sm">Order</button></div>
+        <div class="sg-block"><span class="sg-label">Base</span><button class="btn btn-red">Order Now</button></div>
+        <div class="sg-block"><span class="sg-label">LG</span><button class="btn btn-red btn-lg">Order Now</button></div>
+        <div class="sg-block"><span class="sg-label">XL</span><button class="btn btn-red btn-xl">Order Now</button></div>
+      </div>
+    </div>
+
+    <!-- States -->
+    <div style="margin-bottom:32px;">
+      <span class="sg-label" style="display:block; margin-bottom:16px;">States</span>
+      <div class="sg-row">
+        <div class="sg-block"><span class="sg-label">Default</span><button class="btn btn-primary">Checkout</button></div>
+        <div class="sg-block"><span class="sg-label">Loading</span><button class="btn btn-primary loading" style="width:120px;">Checkout</button></div>
+        <div class="sg-block"><span class="sg-label">Disabled</span><button class="btn btn-primary" disabled>Checkout</button></div>
+      </div>
+    </div>
+
+    <!-- Full width on dark -->
+    <div style="padding:32px; background:var(--ink); margin-top:24px;">
+      <span class="sg-label" style="display:block; margin-bottom:16px; color:rgba(250,248,243,0.4);">Full width — on dark</span>
+      <div style="display:flex; flex-direction:column; gap:12px; max-width:400px;">
+        <button class="btn btn-red btn-full btn-lg">Place Order — $18.00</button>
+        <button class="btn btn-outline btn-full" style="border-color:rgba(250,248,243,0.3); color:var(--paper);">Continue Shopping</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       06 — FORMS
+       ═══════════════════════════════════════════════════════ -->
+  <section id="forms" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">06</span>
+      <span class="sg-heading-text">Form Elements</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr; gap:48px;">
+      <div style="display:grid; gap:48px; max-width:840px;">
+        <!-- Input / Select / Textarea row -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:24px;">
+          <div class="form-preview">
+            <div class="form-group">
+              <label class="form-label form-label-required">Store Name</label>
+              <input class="input" type="text" placeholder="e.g. Corner Deli NYC">
+              <span class="form-hint">As it appears on signage</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input class="input" type="email" placeholder="orders@example.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input class="input" type="tel" placeholder="+1 (718) 555-0123">
+            </div>
+            <div class="form-group">
+              <label class="form-label form-label-required">Payment Method</label>
+              <div class="select-wrap">
+                <select class="select">
+                  <option value="">— select —</option>
+                  <option>Cash</option>
+                  <option>Check</option>
+                  <option>Zelle</option>
+                  <option>Square</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notes</label>
+              <textarea class="textarea" placeholder="Delivery notes, hours, etc."></textarea>
+            </div>
+          </div>
+
+          <!-- States column -->
+          <div class="form-preview">
+            <div class="form-group">
+              <label class="form-label">Default</label>
+              <input class="input" type="text" value="276 Chestnut Street">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Error State</label>
+              <input class="input error" type="text" value="invalid@">
+              <span class="form-error">✕ Please enter a valid email address</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Success State</label>
+              <input class="input success" type="text" value="tahmid@oishiinyc.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Disabled</label>
+              <input class="input" type="text" value="Read only" disabled style="opacity:0.5; cursor:not-allowed;">
+            </div>
+
+            <!-- Quantity stepper -->
+            <div class="form-group">
+              <label class="form-label">Quantity (×3)</label>
+              <div class="stepper">
+                <button class="stepper-btn" onclick="stepDown(this)">−</button>
+                <span class="stepper-value" id="stepVal">9</span>
+                <button class="stepper-btn" onclick="stepUp(this)">+</button>
+              </div>
+              <span class="form-hint">Multiples of 3 — taco holder units</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkboxes / Radios / Toggles -->
+        <div>
+          <span class="sg-label" style="display:block;margin-bottom:16px;">Controls</span>
+          <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:24px;">
+            <div class="sg-block" style="gap:12px;">
+              <span class="sg-label">Checkboxes</span>
+              <label class="check-group">
+                <input type="checkbox" class="check-input" checked>
+                <span class="check-label">Tuna Mayo</span>
+              </label>
+              <label class="check-group">
+                <input type="checkbox" class="check-input">
+                <span class="check-label">Spicy Tuna</span>
+              </label>
+              <label class="check-group">
+                <input type="checkbox" class="check-input" checked>
+                <span class="check-label">Salmon</span>
+              </label>
+            </div>
+            <div class="sg-block" style="gap:12px;">
+              <span class="sg-label">Radio</span>
+              <label class="check-group">
+                <input type="radio" class="check-input radio-input" name="type" checked>
+                <span class="check-label">Pickup</span>
+              </label>
+              <label class="check-group">
+                <input type="radio" class="check-input radio-input" name="type">
+                <span class="check-label">Delivery</span>
+              </label>
+            </div>
+            <div class="sg-block" style="gap:12px;">
+              <span class="sg-label">Toggles</span>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <label class="toggle">
+                  <input type="checkbox" checked>
+                  <span class="toggle-track"></span>
+                </label>
+                <span class="t-body-sm">In Stock</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <label class="toggle">
+                  <input type="checkbox">
+                  <span class="toggle-track"></span>
+                </label>
+                <span class="t-body-sm t-muted">Sold Out</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       07 — BADGES & STATUS
+       ═══════════════════════════════════════════════════════ -->
+  <section id="badges" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">07</span>
+      <span class="sg-heading-text">Badges & Status</span>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:32px;">
+
+      <div>
+        <span class="sg-label" style="display:block; margin-bottom:16px;">Badges</span>
+        <div class="sg-row">
+          <div class="sg-block"><span class="sg-label">Green</span><span class="badge badge-green"><span class="badge-dot"></span>Available</span></div>
+          <div class="sg-block"><span class="sg-label">Red</span><span class="badge badge-red"><span class="badge-dot"></span>Sold Out</span></div>
+          <div class="sg-block"><span class="sg-label">Gold</span><span class="badge badge-gold"><span class="badge-dot"></span>Sesame</span></div>
+          <div class="sg-block"><span class="sg-label">Ink</span><span class="badge badge-ink">New</span></div>
+          <div class="sg-block"><span class="sg-label">Paper</span><span class="badge badge-paper">Pending</span></div>
+        </div>
+      </div>
+
+      <div>
+        <span class="sg-label" style="display:block; margin-bottom:16px;">Status Indicators</span>
+        <div class="sg-row">
+          <div class="sg-block">
+            <span class="sg-label">Live</span>
+            <span class="status status-live"><span class="status-dot"></span>In Stock</span>
+          </div>
+          <div class="sg-block">
+            <span class="sg-label">Out</span>
+            <span class="status status-out"><span class="status-dot"></span>Sold Out</span>
+          </div>
+          <div class="sg-block">
+            <span class="sg-label">Pending</span>
+            <span class="status status-pending"><span class="status-dot"></span>Pending Payment</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span class="sg-label" style="display:block; margin-bottom:16px;">Allergen Tags</span>
+        <div class="sg-row">
+          <span class="allergen-tag">⚠ Fish (Salmon)</span>
+          <span class="allergen-tag">⚠ Sesame</span>
+          <span class="allergen-tag">⚠ Soy</span>
+          <span class="allergen-tag">⚠ Wheat</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="sg-label" style="display:block; margin-bottom:16px;">Payment Method Tags</span>
+        <div class="sg-row">
+          <span class="badge badge-ink">Cash</span>
+          <span class="badge badge-ink">Check</span>
+          <span class="badge badge-ink">Zelle</span>
+          <span class="badge badge-ink">Square</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="sg-label" style="display:block; margin-bottom:16px;">Notices / Alerts</span>
+        <div style="display:flex; flex-direction:column; gap:12px; max-width:540px;">
+          <div class="notice notice-red">⚠ Teriyaki Salmon is currently sold out. Check back Friday.</div>
+          <div class="notice notice-green">✓ Order confirmed. We'll reach out to coordinate delivery.</div>
+          <div class="notice notice-gold">ℹ Next delivery scheduled for Tuesday, July 1.</div>
+          <div class="notice notice-ink">Keep refrigerated. Consume within 2 days of delivery.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       08 — CARDS
+       ═══════════════════════════════════════════════════════ -->
+  <section id="cards" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">08</span>
+      <span class="sg-heading-text">Cards</span>
+    </div>
+
+    <!-- Flavor cards -->
+    <span class="sg-label" style="display:block; margin-bottom:16px;">Flavor Cards</span>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:16px; margin-bottom:48px;">
+
+      <!-- Card 1 — In stock -->
+      <div class="flavor-card">
+        <div class="flavor-card-img" style="background: linear-gradient(135deg, #FDF8F0 0%, #F5E8D0 100%); display:flex; align-items:center; justify-content:center;">
+          <svg width="80" height="88" viewBox="0 0 100 110" fill="none" opacity="0.25">
+            <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="none" stroke="#0A0A0A" stroke-width="4"/>
+            <rect x="12" y="70" width="76" height="30" fill="#0A0A0A"/>
+          </svg>
+        </div>
+        <div class="flavor-card-body">
+          <div class="card-number">01</div>
+          <span class="status status-live" style="font-size:var(--text-xs);"><span class="status-dot"></span>Available</span>
+          <h3 class="flavor-card-name">Teriyaki Salmon</h3>
+          <p class="flavor-card-desc">Premium salmon with house teriyaki glaze, sesame, and brown sugar.</p>
+          <div class="flavor-card-footer">
+            <span class="flavor-card-price">$4.50</span>
+            <button class="btn btn-red btn-sm">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Sold out -->
+      <div class="flavor-card" style="opacity:0.65;">
+        <div class="flavor-card-img" style="background: linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 100%); display:flex; align-items:center; justify-content:center;">
+          <svg width="80" height="88" viewBox="0 0 100 110" fill="none" opacity="0.15">
+            <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="none" stroke="#0A0A0A" stroke-width="4"/>
+            <rect x="12" y="70" width="76" height="30" fill="#0A0A0A"/>
+          </svg>
+        </div>
+        <div class="flavor-card-body">
+          <div class="card-number">02</div>
+          <span class="status status-out" style="font-size:var(--text-xs);"><span class="status-dot"></span>Sold Out</span>
+          <h3 class="flavor-card-name">Spicy Tuna</h3>
+          <p class="flavor-card-desc">Fresh tuna with sriracha mayo and toasted sesame seeds.</p>
+          <div class="flavor-card-footer">
+            <span class="flavor-card-price">$4.75</span>
+            <button class="btn btn-outline btn-sm" disabled>Sold Out</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="flavor-card">
+        <div class="flavor-card-img" style="background: linear-gradient(135deg, #EDF5ED 0%, #D5EAD5 100%); display:flex; align-items:center; justify-content:center;">
+          <svg width="80" height="88" viewBox="0 0 100 110" fill="none" opacity="0.2">
+            <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="none" stroke="#0A0A0A" stroke-width="4"/>
+            <rect x="12" y="70" width="76" height="30" fill="#1E3A1E"/>
+          </svg>
+        </div>
+        <div class="flavor-card-body">
+          <div class="card-number">03</div>
+          <span class="status status-live" style="font-size:var(--text-xs);"><span class="status-dot"></span>Available</span>
+          <h3 class="flavor-card-name">Umeboshi</h3>
+          <p class="flavor-card-desc">Traditional pickled plum — tart, savory, authentically Japanese.</p>
+          <div class="flavor-card-footer">
+            <span class="flavor-card-price">$4.25</span>
+            <button class="btn btn-red btn-sm">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order summary card -->
+    <span class="sg-label" style="display:block; margin-bottom:16px;">Order Summary</span>
+    <div style="max-width:420px; background:var(--surface); border:1.5px solid var(--border); padding:var(--sp-6);">
+      <h4 style="margin-bottom:var(--sp-4);">Your Order</h4>
+      <div class="order-row">
+        <div>
+          <div class="order-row-name">Teriyaki Salmon</div>
+          <div class="order-row-meta">×2 · pickup</div>
+        </div>
+        <span class="order-row-price">$9.00</span>
+      </div>
+      <div class="order-row">
+        <div>
+          <div class="order-row-name">Umeboshi</div>
+          <div class="order-row-meta">×1 · pickup</div>
+        </div>
+        <span class="order-row-price">$4.25</span>
+      </div>
+      <div class="order-row" style="border:none; padding-top:var(--sp-5); margin-top:var(--sp-2); border-top:2px solid var(--ink);">
+        <span style="font-weight:700; font-size:var(--text-lg);">Total</span>
+        <span class="order-row-price" style="font-size:var(--text-xl); color:var(--red);">$13.25</span>
+      </div>
+      <button class="btn btn-red btn-full" style="margin-top:var(--sp-4);">Checkout</button>
+    </div>
+
+    <!-- Admin data table -->
+    <span class="sg-label" style="display:block; margin-top:48px; margin-bottom:16px;">Data Table (admin)</span>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Store</th>
+            <th>Last Delivery</th>
+            <th>Qty Delivered</th>
+            <th>Qty Sold</th>
+            <th>Amount Due</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Corner Deli</strong></td>
+            <td><span class="t-muted t-body-sm">Jun 25</span></td>
+            <td class="t-mono">27</td>
+            <td class="t-mono">22</td>
+            <td class="t-mono" style="color:var(--red);font-weight:700;">$99.00</td>
+            <td><span class="badge badge-red"><span class="badge-dot"></span>Unpaid</span></td>
+          </tr>
+          <tr>
+            <td><strong>Brooklyn Bodega</strong></td>
+            <td><span class="t-muted t-body-sm">Jun 25</span></td>
+            <td class="t-mono">18</td>
+            <td class="t-mono">18</td>
+            <td class="t-mono" style="color:var(--success);font-weight:700;">$81.00</td>
+            <td><span class="badge badge-green"><span class="badge-dot"></span>Paid</span></td>
+          </tr>
+          <tr>
+            <td><strong>Park Slope Market</strong></td>
+            <td><span class="t-muted t-body-sm">Jun 25</span></td>
+            <td class="t-mono">21</td>
+            <td class="t-mono">—</td>
+            <td class="t-mono t-muted">TBD</td>
+            <td><span class="badge badge-paper">Pending Return</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       09 — NAVIGATION
+       ═══════════════════════════════════════════════════════ -->
+  <section id="nav" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">09</span>
+      <span class="sg-heading-text">Navigation</span>
+    </div>
+
+    <!-- Nav preview (static, non-fixed) -->
+    <span class="sg-label" style="display:block; margin-bottom:16px;">Desktop Nav</span>
+    <div style="position:relative; background:var(--paper); border:1.5px solid var(--border); overflow:hidden;">
+      <div style="display:flex; align-items:center; justify-content:space-between; height:70px; padding-inline:40px; background:rgba(250,248,243,0.92); border-bottom:1.5px solid var(--border);">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <svg width="36" height="40" viewBox="0 0 100 110" fill="none">
+            <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="#FAF8F3" stroke="#0A0A0A" stroke-width="5" stroke-linejoin="round"/>
+            <rect x="12" y="70" width="76" height="30" fill="#1E3A1E"/>
+            <circle cx="38" cy="54" r="4.5" fill="#0A0A0A"/>
+            <circle cx="62" cy="54" r="4.5" fill="#0A0A0A"/>
+            <circle cx="39.5" cy="52.5" r="1.5" fill="white"/>
+            <circle cx="63.5" cy="52.5" r="1.5" fill="white"/>
+            <path d="M41 65 Q50 72 59 65" stroke="#0A0A0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div style="font-family:var(--font-display);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink);line-height:1;">OISHII</div>
+            <div style="font-family:var(--font-display);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);line-height:1.2;">ONIGIRI</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:40px;">
+          <a class="nav-link active">Home</a>
+          <a class="nav-link">Menu</a>
+          <a class="nav-link">Order</a>
+          <a class="nav-link">Wholesale</a>
+          <button class="btn btn-red btn-sm">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile nav preview -->
+    <span class="sg-label" style="display:block; margin-top:32px; margin-bottom:16px;">Mobile Nav + Drawer</span>
+    <div style="max-width:390px; position:relative; background:var(--paper); border:1.5px solid var(--border); overflow:hidden;">
+      <div style="display:flex; align-items:center; justify-content:space-between; height:60px; padding-inline:20px; background:rgba(250,248,243,0.92); border-bottom:1.5px solid var(--border);">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <svg width="28" height="31" viewBox="0 0 100 110" fill="none">
+            <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="#FAF8F3" stroke="#0A0A0A" stroke-width="5"/>
+            <rect x="12" y="70" width="76" height="30" fill="#1E3A1E"/>
+            <circle cx="38" cy="54" r="4.5" fill="#0A0A0A"/>
+            <circle cx="62" cy="54" r="4.5" fill="#0A0A0A"/>
+          </svg>
+          <span style="font-family:var(--font-display);font-size:13px;letter-spacing:0.12em;color:var(--ink);">OISHII <span style="color:var(--red);">ONIGIRI</span></span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:5px; padding:4px; cursor:pointer;">
+          <span style="display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;"></span>
+          <span style="display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;"></span>
+          <span style="display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;"></span>
+        </div>
+      </div>
+      <!-- Drawer preview -->
+      <div style="padding:24px 20px; display:flex; flex-direction:column; gap:0;">
+        <a style="font-family:var(--font-display);font-size:28px;color:var(--red);padding:12px 0;border-bottom:1px solid var(--border);letter-spacing:-0.01em;">Home</a>
+        <a style="font-family:var(--font-display);font-size:28px;color:var(--ink);padding:12px 0;border-bottom:1px solid var(--border);letter-spacing:-0.01em;">Menu</a>
+        <a style="font-family:var(--font-display);font-size:28px;color:var(--ink);padding:12px 0;border-bottom:1px solid var(--border);letter-spacing:-0.01em;">Order</a>
+        <a style="font-family:var(--font-display);font-size:28px;color:var(--ink);padding:12px 0;border-bottom:1px solid var(--border);letter-spacing:-0.01em;">Wholesale</a>
+        <button class="btn btn-red btn-full" style="margin-top:24px;">Order Now</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       10 — MOTION
+       ═══════════════════════════════════════════════════════ -->
+  <section id="animation" class="sg-section">
+    <div class="sg-heading">
+      <span class="sg-heading-num">10</span>
+      <span class="sg-heading-text">Motion & Animation</span>
+    </div>
+
+    <div class="sg-row" style="gap:32px; flex-wrap:wrap;">
+
+      <!-- Skeleton loader -->
+      <div class="sg-block" style="gap:8px; min-width:200px; max-width:280px; width:100%;">
+        <span class="sg-label">Skeleton Loader</span>
+        <div style="background:var(--surface); border:1.5px solid var(--border); padding:0; overflow:hidden;">
+          <div class="skeleton" style="height:160px; border-radius:0;"></div>
+          <div style="padding:20px; display:flex; flex-direction:column; gap:10px;">
+            <div class="skeleton" style="height:12px; width:60%;"></div>
+            <div class="skeleton" style="height:20px; width:80%;"></div>
+            <div class="skeleton" style="height:14px; width:90%;"></div>
+            <div class="skeleton" style="height:14px; width:55%;"></div>
+            <div class="skeleton" style="height:36px; width:40%; margin-top:4px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating mascot -->
+      <div class="sg-block" style="gap:8px; align-items:center;">
+        <span class="sg-label">Float Animation</span>
+        <svg class="mascot mascot-xl mascot-animate" viewBox="0 0 100 110" fill="none" style="cursor:pointer;" title="Click me!">
+          <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="#FAF8F3" stroke="#0A0A0A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="12" y="70" width="76" height="30" fill="#1E3A1E"/>
+          <path d="M12 70 L88 70 L88 77 C88 77 72 79 50 79 C28 79 12 77 12 77 Z" fill="rgba(0,0,0,0.12)"/>
+          <circle cx="38" cy="54" r="4.5" fill="#0A0A0A"/>
+          <circle cx="62" cy="54" r="4.5" fill="#0A0A0A"/>
+          <circle cx="39.5" cy="52.5" r="1.5" fill="white"/>
+          <circle cx="63.5" cy="52.5" r="1.5" fill="white"/>
+          <path d="M41 65 Q50 72 59 65" stroke="#0A0A0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <rect x="20" y="78" width="14" height="4" rx="2" fill="#2D5A2D" opacity="0.6"/>
+          <rect x="42" y="76" width="18" height="4" rx="2" fill="#2D5A2D" opacity="0.4"/>
+          <rect x="68" y="79" width="10" height="4" rx="2" fill="#2D5A2D" opacity="0.5"/>
+        </svg>
+        <span class="t-label">Hover to bounce</span>
+      </div>
+
+      <!-- Easing curves -->
+      <div class="sg-block" style="gap:12px;">
+        <span class="sg-label">Easing Values</span>
+        <div style="display:flex; flex-direction:column; gap:8px; font-family:var(--font-mono); font-size:10px; color:var(--ink-40);">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="width:80px;">ease</span>
+            <span>cubic-bezier(0.25, 0.46, 0.45, 0.94)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="width:80px;">ease-out</span>
+            <span>cubic-bezier(0.0, 0.0, 0.2, 1)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="width:80px;">spring</span>
+            <span>cubic-bezier(0.34, 1.56, 0.64, 1)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="width:80px;">bounce</span>
+            <span>cubic-bezier(0.68,-0.55, 0.265,1.55)</span>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px; font-family:var(--font-mono); font-size:10px; color:var(--ink-40);">
+          <div>--dur-instant : 80ms</div>
+          <div>--dur-fast    : 150ms</div>
+          <div>--dur-base    : 250ms</div>
+          <div>--dur-slow    : 400ms</div>
+          <div>--dur-slower  : 600ms</div>
+        </div>
+      </div>
+
+      <!-- Scroll reveal demo -->
+      <div class="sg-block" style="gap:12px;">
+        <span class="sg-label">Scroll Reveal (.reveal)</span>
+        <div style="display:flex; flex-direction:column; gap:8px; max-width:260px;">
+          <div class="reveal visible" style="padding:16px; background:var(--surface); border:1.5px solid var(--border);">
+            <span class="t-body-sm">First — already visible</span>
+          </div>
+          <div class="reveal" id="revealDemo" style="padding:16px; background:var(--surface); border:1.5px solid var(--border);">
+            <span class="t-body-sm">Second — will animate in</span>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="triggerReveal()">Trigger Reveal</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       11 — HERO COMPOSITION
+       ═══════════════════════════════════════════════════════ -->
+  <section id="hero" style="background:var(--ink);">
+    <div style="padding:24px var(--gutter); background:var(--ink);">
+      <div class="sg-heading sg-dark">
+        <span class="sg-heading-num">11</span>
+        <span class="sg-heading-text">Hero Composition Preview</span>
+      </div>
+    </div>
+
+    <!-- Light hero -->
+    <div class="sg-hero-preview">
+      <div class="hero-grid"></div>
+      <div class="hero-mark"></div>
+      <div style="position:relative; z-index:1; text-align:center; max-width:700px;">
+        <div class="hero-eyebrow" style="justify-content:center;">
+          <span class="hero-eyebrow-line"></span>
+          <span class="t-label">Handcrafted · New York City</span>
+          <span class="hero-eyebrow-line"></span>
+        </div>
+
+        <div style="font-family:var(--font-display); font-size:var(--text-5xl); line-height:0.95; letter-spacing:var(--tracking-tight); color:var(--ink); margin-bottom:var(--sp-6);">
+          OISHII<br><span style="color:var(--red);">ONIGIRI</span>
+        </div>
+
+        <div style="font-family:var(--font-serif); font-size:var(--text-xl); color:var(--ink-40); margin-bottom:var(--sp-4);">
+          美味しいおにぎり
+        </div>
+
+        <p style="font-size:var(--text-lg); color:var(--ink-60); max-width:420px; margin:0 auto var(--sp-10); line-height:var(--leading-relaxed);">
+          Premium Japanese rice balls made fresh daily. Available at select NYC locations.
+        </p>
+
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn-red btn-lg">Order Now</button>
+          <button class="btn btn-outline btn-lg">View Menu</button>
+        </div>
+
+        <div style="margin-top:48px; display:flex; gap:32px; justify-content:center; flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display); font-size:var(--text-3xl); color:var(--red); line-height:1;">30+</div>
+            <div style="font-size:var(--text-xs); color:var(--ink-40); margin-top:4px; letter-spacing:var(--tracking-wide);">NYC Stores</div>
+          </div>
+          <div style="width:1px; background:var(--border);"></div>
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display); font-size:var(--text-3xl); color:var(--red); line-height:1;">6</div>
+            <div style="font-size:var(--text-xs); color:var(--ink-40); margin-top:4px; letter-spacing:var(--tracking-wide);">Flavors</div>
+          </div>
+          <div style="width:1px; background:var(--border);"></div>
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-display); font-size:var(--text-3xl); color:var(--red); line-height:1;">Fresh</div>
+            <div style="font-size:var(--text-xs); color:var(--ink-40); margin-top:4px; letter-spacing:var(--tracking-wide);">Every 3–4 Days</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark footer of style guide -->
+    <div style="padding:48px var(--gutter); background:var(--ink); text-align:center;">
+      <svg width="48" height="54" viewBox="0 0 100 110" fill="none" style="margin:0 auto 16px;">
+        <path d="M50 6 C50 6 88 64 88 78 C88 92 72 100 50 100 C28 100 12 92 12 78 C12 64 50 6 50 6Z" fill="rgba(250,248,243,0.08)" stroke="rgba(250,248,243,0.3)" stroke-width="4"/>
+        <rect x="12" y="70" width="76" height="30" fill="#2D5A2D"/>
+        <circle cx="38" cy="54" r="4.5" fill="rgba(250,248,243,0.5)"/>
+        <circle cx="62" cy="54" r="4.5" fill="rgba(250,248,243,0.5)"/>
+        <path d="M41 65 Q50 72 59 65" stroke="rgba(250,248,243,0.5)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <p style="font-family:var(--font-display); font-size:12px; letter-spacing:0.25em; color:rgba(250,248,243,0.2); text-transform:uppercase;">OISHIIONIGIRI Design System — v1.0</p>
+    </div>
+  </section>
+
+
+  <script>
+    // ── Stepper ──────────────────────────────────
+    function stepUp(btn) {
+      const val = btn.previousElementSibling;
+      val.textContent = String(parseInt(val.textContent) + 3);
+    }
+    function stepDown(btn) {
+      const val = btn.nextElementSibling;
+      const cur = parseInt(val.textContent);
+      if (cur > 0) val.textContent = String(cur - 3);
+    }
+
+    // ── Scroll reveal ────────────────────────────
+    function triggerReveal() {
+      const el = document.getElementById('revealDemo');
+      el.classList.remove('visible');
+      void el.offsetWidth;
+      setTimeout(() => el.classList.add('visible'), 50);
+    }
+
+    // ── Intersection observer for .reveal ────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal:not(#revealDemo)').forEach(el => observer.observe(el));
+
+    // ── Nav scroll indicator ─────────────────────
+    const sgNav = document.querySelector('.sg-nav');
+    const sections = document.querySelectorAll('section[id]');
+
+    const linkObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          document.querySelectorAll('.sg-nav a').forEach(a => {
+            a.style.color = a.getAttribute('href') === `#${id}`
+              ? 'rgba(250,248,243,0.95)'
+              : 'rgba(250,248,243,0.45)';
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(s => linkObserver.observe(s));
+
+    // ── Mascot bounce on click ───────────────────
+    document.querySelectorAll('.mascot-animate').forEach(el => {
+      el.addEventListener('click', () => {
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = 'mascot-bounce 0.5s var(--ease-bounce), mascot-float 3s ease-in-out 0.5s infinite';
+      });
+    });
+  </script>
+</body>
+</html>
