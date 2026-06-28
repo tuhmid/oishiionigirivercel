@@ -43,14 +43,16 @@ export async function POST(req: NextRequest) {
       order: {
         locationId: process.env.SQUARE_LOCATION_ID!,
         lineItems,
-        metadata: {
-          customer_name: customer_name ?? '',
-          customer_phone: customer_phone ?? '',
-          type: type ?? 'pickup',
-          delivery_address: delivery_address ?? '',
-          notes: notes ?? '',
-          customer_email: customer_email ?? '',
-        },
+        metadata: Object.fromEntries(
+          Object.entries({
+            customer_name: customer_name || null,
+            customer_phone: customer_phone || null,
+            type: type || 'pickup',
+            delivery_address: delivery_address || null,
+            notes: notes || null,
+            customer_email: customer_email || null,
+          }).filter(([, v]) => v !== null)
+        ),
       },
       checkoutOptions: {
         redirectUrl: `${origin}/order/success`,
