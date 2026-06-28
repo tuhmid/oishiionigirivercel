@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { squareClient } from '@/lib/square'
+import { SquareClient, SquareEnvironment } from 'square'
 import { createClient } from '@/lib/supabase/server'
 import { randomUUID } from 'crypto'
 import { RETAIL_PRICE } from '@/lib/pricing'
 
 export async function POST(req: NextRequest) {
   try {
+    const squareClient = new SquareClient({
+      token: process.env.SQUARE_ACCESS_TOKEN!,
+      environment: process.env.SQUARE_ENVIRONMENT === 'production'
+        ? SquareEnvironment.Production
+        : SquareEnvironment.Sandbox,
+    })
     const body = await req.json()
     const { customer_name, customer_email, customer_phone, type, delivery_address, notes, items } = body
 
