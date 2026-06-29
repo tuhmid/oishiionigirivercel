@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, ChevronRight } from 'lucide-react'
 import { PAYMENT_LABELS } from '@/lib/utils'
+import DeleteStoreButton from './_components/DeleteStoreButton'
 
 export default async function StoresPage() {
   const supabase = await createClient()
@@ -62,22 +63,22 @@ export default async function StoresPage() {
       <div style={{ border: '1px solid #e2ddd0' }}>
         <div
           className="grid text-xs tracking-widest uppercase px-5 py-3"
-          style={{ gridTemplateColumns: '2fr 2fr 1fr 1fr 40px', color: '#666666', borderBottom: '1px solid #e2ddd0' }}
+          style={{ gridTemplateColumns: '2fr 2fr 1fr 1fr 40px 40px', color: '#666666', borderBottom: '1px solid #e2ddd0' }}
         >
           <span>Store</span>
           <span>Address</span>
           <span>Payment</span>
           <span>Status</span>
           <span />
+          <span />
         </div>
         {stores?.map(store => (
-          <Link
+          <div
             key={store.id}
-            href={`/admin/stores/${store.id}`}
-            className="grid items-center px-5 py-4 transition-colors hover:bg-[#f5f0e6]"
-            style={{ gridTemplateColumns: '2fr 2fr 1fr 1fr 40px', borderBottom: '1px solid #f0ece0', background: '#ffffff' }}
+            className="grid items-center px-5 py-4"
+            style={{ gridTemplateColumns: '2fr 2fr 1fr 1fr 40px 40px', borderBottom: '1px solid #f0ece0', background: '#ffffff' }}
           >
-            <span className="text-sm font-medium" style={{ color: '#0a0a0a' }}>{store.name}</span>
+            <Link href={`/admin/stores/${store.id}`} className="text-sm font-medium hover:underline" style={{ color: '#0a0a0a' }}>{store.name}</Link>
             <span className="text-xs" style={{ color: '#555555' }}>{store.address ?? '—'}</span>
             <span className="text-xs" style={{ color: '#777777' }}>
               {store.preferred_payment_method ? PAYMENT_LABELS[store.preferred_payment_method] : '—'}
@@ -85,8 +86,9 @@ export default async function StoresPage() {
             <span className="text-xs" style={{ color: store.active ? '#2a7a2a' : '#999999' }}>
               {store.active ? 'Active' : 'Inactive'}
             </span>
-            <ChevronRight size={14} style={{ color: '#c8c4b8' }} />
-          </Link>
+            <Link href={`/admin/stores/${store.id}`}><ChevronRight size={14} style={{ color: '#c8c4b8' }} /></Link>
+            <DeleteStoreButton storeId={store.id} storeName={store.name} />
+          </div>
         ))}
         {(stores?.length ?? 0) === 0 && (
           <p className="px-5 py-8 text-sm" style={{ color: '#666666' }}>No stores yet. Add your first store.</p>
