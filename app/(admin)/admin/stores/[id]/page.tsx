@@ -39,6 +39,23 @@ export default async function StoreDetailPage({ params }: { params: Promise<{ id
 
   if (!store) return notFound()
 
+  // Fallback: pull cert/billing from original wholesale request if not on store record
+  if (!store.resale_cert_url && !store.billable_name) {
+    const { data: req } = await supabase
+      .from('store_order_requests')
+      .select('billable_name, billable_address, cert_authority_number, resale_cert_url')
+      .ilike('store_name', store.name)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+    if (req) {
+      store.billable_name = req.billable_name
+      store.billable_address = req.billable_address
+      store.cert_authority_number = req.cert_authority_number
+      store.resale_cert_url = req.resale_cert_url
+    }
+  }
+
   const normalizedBatches = (batches ?? []).map(b => ({
     ...b,
     invoice: Array.isArray(b.invoice) ? (b.invoice[0] ?? null) : b.invoice,
