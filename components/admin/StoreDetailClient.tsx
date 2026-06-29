@@ -66,6 +66,7 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
     Object.fromEntries((store?.allocations ?? []).map(a => [a.flavor_id, a.default_qty]))
   )
   const [deliveryDays, setDeliveryDays] = useState<string[]>(store?.delivery_days ?? [])
+  const [open247, setOpen247] = useState<boolean>((store as Store & { open_247?: boolean })?.open_247 ?? false)
   const [generating, setGenerating] = useState(false)
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<StoreForm>({
@@ -83,7 +84,7 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
     const supabase = createClient()
 
     if (store) {
-      const { error } = await supabase.from('stores').update(data).eq('id', store.id)
+      const { error } = await supabase.from('stores').update({ ...data, open_247: open247 }).eq('id', store.id)
       if (error) { toast.error(error.message); setSaving(false); return }
 
       // Upsert allocations
@@ -96,7 +97,7 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
 
       toast.success('Store updated')
     } else {
-      const { data: newStore, error } = await supabase.from('stores').insert(data).select().single()
+      const { data: newStore, error } = await supabase.from('stores').insert({ ...data, open_247: open247 }).select().single()
       if (error || !newStore) { toast.error(error?.message ?? 'Failed'); setSaving(false); return }
       router.push(`/admin/stores/${newStore.id}`)
       return
@@ -320,6 +321,21 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
           <div>
             <label className="text-xs tracking-widest uppercase block mb-1.5" style={{ color: '#555555' }}>Notes</label>
             <textarea {...register('notes')} rows={3} style={{ ...inputStyle, resize: 'none' }} />
+          </div>
+          <div>
+            <label className="text-xs tracking-widest uppercase block mb-2" style={{ color: '#555555' }}>Hours</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={open247}
+                onChange={e => setOpen247(e.target.checked)}
+                style={{ width: 16, height: 16, cursor: 'pointer', accentColor: '#e63946' }}
+              />
+              <span className="text-sm" style={{ color: '#0a0a0a' }}>Open 24/7</span>
+              {open247 && (
+                <span className="text-xs font-bold px-2 py-0.5" style={{ background: '#e63946', color: '#fff', letterSpacing: '0.05em' }}>24/7</span>
+              )}
+            </label>
           </div>
           <button
             type="submit"

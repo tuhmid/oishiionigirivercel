@@ -83,8 +83,11 @@ export default async function StoresPage() {
             <span className="text-xs" style={{ color: '#777777' }}>
               {store.preferred_payment_method ? PAYMENT_LABELS[store.preferred_payment_method] : '—'}
             </span>
-            <span className="text-xs" style={{ color: store.active ? '#2a7a2a' : '#999999' }}>
+            <span className="text-xs flex items-center gap-2" style={{ color: store.active ? '#2a7a2a' : '#999999' }}>
               {store.active ? 'Active' : 'Inactive'}
+              {(store as typeof store & { open_247?: boolean }).open_247 && (
+                <span className="text-xs font-bold px-1.5 py-0.5" style={{ background: '#e63946', color: '#fff', letterSpacing: '0.05em', lineHeight: 1 }}>24/7</span>
+              )}
             </span>
             <Link href={`/admin/stores/${store.id}`}><ChevronRight size={14} style={{ color: '#c8c4b8' }} /></Link>
             <DeleteStoreButton storeId={store.id} storeName={store.name} />

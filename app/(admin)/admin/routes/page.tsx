@@ -9,7 +9,7 @@ export default async function RoutesPage() {
     .from('batches')
     .select(`
       id, delivery_date, store_id,
-      store:stores(id, name, address, hours)
+      store:stores(id, name, address, hours, open_247)
     `)
     .eq('status', 'pending')
     .order('delivery_date', { ascending: true })
@@ -43,7 +43,7 @@ export default async function RoutesPage() {
   }
   const batchesByDate = new Map<string, RawStop[]>()
   for (const batch of pendingBatches ?? []) {
-    const store = batch.store as unknown as { id: string; name: string; address: string | null; hours: Record<string, { open: string; close: string }> | null }
+    const store = batch.store as unknown as { id: string; name: string; address: string | null; hours: Record<string, { open: string; close: string }> | null; open_247: boolean | null }
     const inv = latestInvoiceByStore.get(store.id)
     if (!batchesByDate.has(batch.delivery_date)) batchesByDate.set(batch.delivery_date, [])
     batchesByDate.get(batch.delivery_date)!.push({
@@ -51,6 +51,7 @@ export default async function RoutesPage() {
       storeName: store.name,
       address: store.address,
       hours: store.hours,
+      open247: store.open_247 ?? false,
       batchId: batch.id,
       scheduledTime: null,
       invoiceId: inv?.id ?? null,
@@ -72,7 +73,10 @@ export default async function RoutesPage() {
         .sort((a, b) => (orderMap.get(a.storeId)?.index ?? 999) - (orderMap.get(b.storeId)?.index ?? 999))
         .map(s => ({ ...s, scheduledTime: orderMap.get(s.storeId)?.scheduledTime ?? null }))
     } else {
-      stops = [...rawStops].sort((a, b) => a.storeName.localeCompare(b.storeName))
+      stops = [...rawStops].sort((a, b) => {
+        if (a.open247 !== b.open247) return a.open247 ? 1 : -1
+        return a.storeName.localeCompare(b.storeName)
+      })
     }
 
     return { date, stops, routePlanId: plan?.id }

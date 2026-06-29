@@ -11,6 +11,7 @@ interface StopData {
   storeName: string
   address: string | null
   hours: Record<string, { open: string; close: string }> | null
+  open247: boolean
   batchId: string
   scheduledTime: string | null
   invoiceId: string | null
@@ -196,13 +197,18 @@ export default function RoutesClient({ days: initialDays }: { days: RouteDay[] }
                 </span>
 
                 <div className="min-w-0">
-                  <p
-                    className="text-sm font-medium truncate hover:underline"
-                    style={{ color: '#0a0a0a', cursor: 'pointer' }}
-                    onClick={e => { e.stopPropagation(); router.push(`/admin/deliveries/${stop.batchId}`) }}
-                  >
-                    {stop.storeName}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p
+                      className="text-sm font-medium truncate hover:underline"
+                      style={{ color: '#0a0a0a', cursor: 'pointer' }}
+                      onClick={e => { e.stopPropagation(); router.push(`/admin/deliveries/${stop.batchId}`) }}
+                    >
+                      {stop.storeName}
+                    </p>
+                    {stop.open247 && (
+                      <span className="text-xs font-bold px-1.5 py-0.5 shrink-0" style={{ background: '#e63946', color: '#fff', letterSpacing: '0.05em', lineHeight: 1 }}>24/7</span>
+                    )}
+                  </div>
                   {stop.address && (
                     <p className="flex items-center gap-1 text-xs mt-0.5 truncate" style={{ color: '#777777' }}>
                       <MapPin size={10} style={{ flexShrink: 0 }} />
