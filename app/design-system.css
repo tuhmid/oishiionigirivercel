@@ -425,7 +425,7 @@
   height: 100svh;
   display: flex; flex-direction: column;
   align-items: center; justify-content: flex-start; text-align: center;
-  padding: calc(60px + var(--sp-8)) var(--gutter) var(--sp-10);
+  padding: calc(60px + var(--sp-10)) var(--gutter) var(--sp-10);
   position: relative; overflow: hidden; background: transparent;
 }
 @media (min-width: 768px) {
@@ -446,8 +446,9 @@
 }
 .hero-eyebrow {
   display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-6);
+  white-space: nowrap;
 }
-.hero-eyebrow-line { width: 32px; height: 1.5px; background: var(--seaweed); }
+.hero-eyebrow-line { width: 32px; height: 1.5px; background: var(--seaweed); flex-shrink: 0; }
 .hero-ctas {
   display: flex; flex-direction: column; gap: var(--sp-3);
   width: 100%; max-width: 320px;
