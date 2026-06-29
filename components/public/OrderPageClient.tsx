@@ -94,8 +94,6 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
           customer_email: form.email,
           customer_phone: form.phone || undefined,
           type: fulfillment,
-          delivery_address:
-            fulfillment === 'delivery' ? form.address : undefined,
           notes: form.notes || undefined,
           tip_amount: tip > 0 ? tip : undefined,
           items,
