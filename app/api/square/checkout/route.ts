@@ -69,7 +69,16 @@ export async function POST(req: NextRequest) {
         redirectUrl: `${origin}/order/success`,
         askForShippingAddress: false,
       },
-      prePopulatedData: customer_email ? { buyerEmail: customer_email } : undefined,
+      prePopulatedData: {
+        ...(customer_email ? { buyerEmail: customer_email } : {}),
+        ...(customer_phone ? { buyerPhoneNumber: customer_phone } : {}),
+        ...(customer_name ? {
+          buyerAddress: {
+            firstName: customer_name.split(' ').slice(0, -1).join(' ') || customer_name,
+            lastName: customer_name.split(' ').slice(-1)[0] || '',
+          },
+        } : {}),
+      },
     })
 
     const url = result.paymentLink?.url

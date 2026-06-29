@@ -581,7 +581,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               disabled={total === 0 || loading}
               onClick={handleCheckout}
             >
-              {loading ? '' : `Checkout — $${total.toFixed(2)}${tip > 0 ? ` (incl. $${tip.toFixed(2)} tip)` : ''}`}
+              {loading ? '' : `Checkout — $${total.toFixed(2)}`}
             </button>
 
             <p
