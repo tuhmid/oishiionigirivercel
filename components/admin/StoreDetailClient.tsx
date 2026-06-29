@@ -184,7 +184,10 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
       const d = new Date(today)
       d.setDate(d.getDate() + i)
       if (deliveryDays.some(day => DAY_TO_JS[day] === d.getDay())) {
-        targetDates.push(d.toISOString().slice(0, 10))
+        const yy = d.getFullYear()
+        const mm = String(d.getMonth() + 1).padStart(2, '0')
+        const dd = String(d.getDate()).padStart(2, '0')
+        targetDates.push(`${yy}-${mm}-${dd}`)
       }
     }
     const existingDates = new Set(batches.map(b => b.delivery_date))
