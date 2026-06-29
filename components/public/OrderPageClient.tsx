@@ -473,8 +473,8 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               </div>
             </div>
 
-            {/* Contact form fields */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {/* Contact form fields — pickup only */}
+            {fulfillment === 'pickup' && <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div className="form-group">
                 <label htmlFor="order-name" className="form-label form-label-required">
                   Name
@@ -526,28 +526,6 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
                 />
               </div>
 
-              {fulfillment === 'delivery' && (
-                <div className="form-group">
-                  <label
-                    htmlFor="order-address"
-                    className="form-label form-label-required"
-                  >
-                    Delivery Address
-                  </label>
-                  <input
-                    id="order-address"
-                    type="text"
-                    className="input"
-                    placeholder="123 Main St, Brooklyn, NY 11201"
-                    value={form.address}
-                    onChange={(e) =>
-                      setForm((prev) => ({ ...prev, address: e.target.value }))
-                    }
-                    autoComplete="street-address"
-                  />
-                </div>
-              )}
-
               <div className="form-group">
                 <label htmlFor="order-notes" className="form-label">
                   Notes
@@ -563,7 +541,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
                   style={{ minHeight: '80px' }}
                 />
               </div>
-            </div>
+            </div>}
 
             {/* Error notice */}
             {error && (
@@ -577,10 +555,10 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               type="button"
               className={`btn btn-green btn-full btn-lg${loading ? ' loading' : ''}`}
               style={{ marginTop: '20px' }}
-              disabled={total === 0 || loading}
+              disabled={fulfillment === 'pickup' ? (total === 0 || loading) : false}
               onClick={handleCheckout}
             >
-              {loading ? '' : fulfillment === 'delivery' ? 'Order Delivery via Square →' : `Checkout — $${total.toFixed(2)}`}
+              {loading ? '' : fulfillment === 'delivery' ? 'Order Delivery →' : `Checkout — $${total.toFixed(2)}`}
             </button>
 
             <p
