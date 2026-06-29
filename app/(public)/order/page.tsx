@@ -39,31 +39,12 @@ const FLAVOR_META = [
   {
     sort_order: 4,
     description:
-      'Classic tuna blended with Kewpie mayo on hand-seasoned Japanese rice.',
+      'Korean-style marinated beef with sweet soy glaze on hand-seasoned Japanese rice.',
     ingredients:
-      'Rice, Tuna, Seaweed, Kewpie Mayo (Vegetable Oil, Egg Yolk, Vinegar, Salt, MSG, Spice, Natural Flavor), Brown Sugar, Salt, Rice Vinegar',
-    allergens: ['Fish (Tuna)', 'Egg'],
-    accent: '#C8DCE8',
-    accentLight: '#E8EFF5',
-  },
-  {
-    sort_order: 5,
-    description:
-      'Traditional Japanese pickled plum — tart, savory, and authentically umami.',
-    ingredients: 'Rice, Umeboshi (Pickled Plum), Seaweed, Salt, Rice Vinegar',
-    allergens: [],
-    accent: '#E89AAC',
-    accentLight: '#F5C8D5',
-  },
-  {
-    sort_order: 6,
-    description:
-      'Fermented soybeans with soy sauce on hand-seasoned Japanese rice — bold and earthy.',
-    ingredients:
-      'Rice, Natto (Fermented Soybeans), Seaweed, Soy Sauce (Water, Soybeans, Wheat, Salt), Brown Sugar, Salt, Rice Vinegar',
-    allergens: ['Soy', 'Wheat'],
-    accent: '#B0CC96',
-    accentLight: '#D5E8C8',
+      'Rice, Beef, Seaweed, Bulgogi Marinade (Soy Sauce [Water, Soybeans, Wheat, Salt], Sugar, Sesame Oil, Garlic, Ginger, Pear Juice, Black Pepper), Brown Sugar, Salt, Rice Vinegar, Sesame Seed',
+    allergens: ['Soy', 'Wheat', 'Sesame'],
+    accent: '#C8A882',
+    accentLight: '#EDE0CC',
   },
 ]
 
@@ -83,8 +64,7 @@ export default async function OrderPage() {
     .order('sort_order')
 
   const FLAVOR_NAMES: Record<number, string> = {
-    1: 'Teriyaki Salmon', 2: 'Spicy Tuna', 3: 'Egg Sando',
-    4: 'Tuna Mayo', 5: 'Umeboshi', 6: 'Natto',
+    1: 'Teriyaki Salmon', 2: 'Spicy Tuna', 3: 'Egg Sando', 4: 'Bulgogi Beef',
   }
 
   const dbFlavors: Flavor[] = flavors?.length

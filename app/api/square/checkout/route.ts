@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { SquareClient, SquareEnvironment } from 'square'
-import { createClient } from '@/lib/supabase/server'
 import { randomUUID } from 'crypto'
 import { RETAIL_PRICE } from '@/lib/pricing'
 
@@ -15,20 +14,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { customer_name, customer_email, customer_phone, type, delivery_address, notes, tip_amount, items } = body
 
-    const supabase = await createClient()
-
-    const flavorIds = items.map((i: { flavor_id: string }) => i.flavor_id)
-    const { data: flavors } = await supabase
-      .from('flavors')
-      .select('id, name')
-      .in('id', flavorIds)
-
-    if (!flavors) return NextResponse.json({ error: 'Failed to fetch flavors' }, { status: 500 })
-
-    const flavorMap = Object.fromEntries(flavors.map((f) => [f.id, f]))
-
-    const lineItems = items.map((item: { flavor_id: string; quantity: number }) => ({
-      name: `OISHII ONIGIRI — ${flavorMap[item.flavor_id]?.name ?? 'Onigiri'}`,
+    const lineItems = items.map((item: { flavor_id: string; name: string; quantity: number }) => ({
+      name: `OISHII ONIGIRI — ${item.name ?? 'Onigiri'}`,
       quantity: String(item.quantity),
       basePriceMoney: {
         amount: BigInt(Math.round(RETAIL_PRICE * 100)),

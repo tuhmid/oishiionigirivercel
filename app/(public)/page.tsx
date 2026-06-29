@@ -16,6 +16,7 @@ const PREVIEW_FLAVORS: Flavor[] = [
   { id: 'p1', name: 'Teriyaki Salmon', description: 'Glazed Atlantic salmon with house teriyaki, sesame seeds, and seasoned Japanese rice.', in_stock: true, stock_count: 0, sort_order: 1, image_url: null, created_at: '' },
   { id: 'p2', name: 'Spicy Tuna',      description: 'Fresh tuna with Siracha heat and Kewpie mayo on hand-seasoned Japanese rice.',         in_stock: true, stock_count: 0, sort_order: 2, image_url: null, created_at: '' },
   { id: 'p3', name: 'Egg Sando',       description: 'Creamy Japanese egg salad with Kewpie mayo, black pepper, and seasoned rice.',          in_stock: true, stock_count: 0, sort_order: 3, image_url: null, created_at: '' },
+  { id: 'p4', name: 'Bulgogi Beef',    description: 'Korean-style marinated beef with sweet soy glaze on hand-seasoned Japanese rice.',      in_stock: true, stock_count: 0, sort_order: 4, image_url: null, created_at: '' },
 ]
 
 export default async function HomePage() {
