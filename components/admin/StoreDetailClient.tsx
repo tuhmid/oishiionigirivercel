@@ -712,7 +712,7 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
                 >
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className="font-mono text-sm font-bold" style={{ color: '#0a0a0a' }}>
-                      {formatDate(batch.created_at)}
+                      {formatDate(batch.delivery_date)}
                     </span>
                     <BatchStatusBadge status={batch.status} />
                     {inv && (
