@@ -64,6 +64,14 @@ export default function PublicNav() {
             >
               Wholesale
             </Link>
+            <a
+              href="https://maps.app.goo.gl/BrATC8LA94MnbpYS6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pub-nav-link"
+            >
+              Location
+            </a>
           </div>
 
           {/* Social icons — desktop only */}
@@ -123,6 +131,14 @@ export default function PublicNav() {
         <Link href="/wholesale" className="pub-nav-drawer-link">
           Wholesale
         </Link>
+        <a
+          href="https://maps.app.goo.gl/BrATC8LA94MnbpYS6"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pub-nav-drawer-link"
+        >
+          Location
+        </a>
         <div style={{ marginTop: 'var(--sp-8)' }}>
           <Link href="/order" className="btn btn-green btn-full">
             Order Now
