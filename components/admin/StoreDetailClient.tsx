@@ -69,6 +69,38 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
   const [open247, setOpen247] = useState<boolean>((store as Store & { open_247?: boolean })?.open_247 ?? false)
   const [generating, setGenerating] = useState(false)
 
+  // Documents & Billing editable state
+  const [billing, setBilling] = useState({
+    billable_name: store?.billable_name ?? '',
+    billable_address: store?.billable_address ?? '',
+    cert_authority_number: store?.cert_authority_number ?? '',
+  })
+  const [certUrl, setCertUrl] = useState<string | null>(store?.resale_cert_url ?? null)
+  const [certFile, setCertFile] = useState<File | null>(null)
+  const [savingDocs, setSavingDocs] = useState(false)
+
+  const saveDocs = async () => {
+    if (!store) return
+    setSavingDocs(true)
+    const supabase = createClient()
+    let resale_cert_url = certUrl
+    if (certFile) {
+      const ext = certFile.name.split('.').pop() ?? 'bin'
+      const path = `resale-certs/${store.id}-${Date.now()}.${ext}`
+      const { data: uploaded } = await supabase.storage.from('certificates').upload(path, certFile, { upsert: true })
+      if (uploaded) {
+        const { data: { publicUrl } } = supabase.storage.from('certificates').getPublicUrl(uploaded.path)
+        resale_cert_url = publicUrl
+        setCertUrl(publicUrl)
+        setCertFile(null)
+      }
+    }
+    const { error } = await supabase.from('stores').update({ ...billing, resale_cert_url }).eq('id', store.id)
+    if (error) toast.error(error.message)
+    else toast.success('Documents saved')
+    setSavingDocs(false)
+  }
+
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<StoreForm>({
     resolver: zodResolver(storeSchema),
     defaultValues: {
@@ -347,57 +379,77 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
           </button>
         </form>
 
-        {/* Documents & Billing — read-only, sourced from wholesale inquiry */}
-        {store && (store.billable_name || store.billable_address || store.cert_authority_number || store.resale_cert_url) && (
-          <div className="max-w-lg mt-8 space-y-4">
+        {/* Documents & Billing — editable */}
+        {store && (
+          <div className="max-w-lg mt-8">
             <div style={{ borderTop: '1px solid #e2ddd0', paddingTop: 24 }}>
               <p className="text-xs tracking-widest uppercase font-semibold mb-4" style={{ color: '#555555' }}>
                 Documents &amp; Billing
               </p>
-              <div className="space-y-3">
-                {store.billable_name && (
-                  <div>
-                    <p className="text-xs tracking-widest uppercase mb-1" style={{ color: '#888888' }}>Billable Name</p>
-                    <p className="text-sm" style={{ color: '#0a0a0a' }}>{store.billable_name}</p>
-                  </div>
-                )}
-                {store.billable_address && (
-                  <div>
-                    <p className="text-xs tracking-widest uppercase mb-1" style={{ color: '#888888' }}>Billable Address</p>
-                    <p className="text-sm" style={{ color: '#0a0a0a' }}>{store.billable_address}</p>
-                  </div>
-                )}
-                {store.cert_authority_number && (
-                  <div>
-                    <p className="text-xs tracking-widest uppercase mb-1" style={{ color: '#888888' }}>Certificate of Authority #</p>
-                    <p className="text-sm font-mono" style={{ color: '#0a0a0a' }}>{store.cert_authority_number}</p>
-                  </div>
-                )}
-                {store.resale_cert_url && (
-                  <div>
-                    <p className="text-xs tracking-widest uppercase mb-2" style={{ color: '#888888' }}>Signed Resale Certificate</p>
-                    {/\.(jpe?g|png|webp|gif)$/i.test(store.resale_cert_url) ? (
-                      <div style={{ border: '1px solid #e2ddd0', padding: 4, display: 'inline-block' }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={store.resale_cert_url}
-                          alt="Resale Certificate"
-                          style={{ maxWidth: '100%', maxHeight: 280, objectFit: 'contain', display: 'block' }}
-                        />
-                      </div>
-                    ) : (
-                      <a
-                        href={store.resale_cert_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm inline-flex items-center gap-1.5"
-                        style={{ color: '#e63946', textDecoration: 'underline' }}
-                      >
-                        📄 View Certificate (PDF)
-                      </a>
-                    )}
-                  </div>
-                )}
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs tracking-widest uppercase block mb-1.5" style={{ color: '#555555' }}>Billable Name</label>
+                  <input
+                    type="text"
+                    value={billing.billable_name}
+                    onChange={e => setBilling(p => ({ ...p, billable_name: e.target.value }))}
+                    style={inputStyle}
+                    placeholder="Legal business name"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs tracking-widest uppercase block mb-1.5" style={{ color: '#555555' }}>Billable Address</label>
+                  <input
+                    type="text"
+                    value={billing.billable_address}
+                    onChange={e => setBilling(p => ({ ...p, billable_address: e.target.value }))}
+                    style={inputStyle}
+                    placeholder="Billing address"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs tracking-widest uppercase block mb-1.5" style={{ color: '#555555' }}>Certificate of Authority #</label>
+                  <input
+                    type="text"
+                    value={billing.cert_authority_number}
+                    onChange={e => setBilling(p => ({ ...p, cert_authority_number: e.target.value }))}
+                    style={inputStyle}
+                    placeholder="e.g. 12-345678"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs tracking-widest uppercase block mb-1.5" style={{ color: '#555555' }}>Resale Certificate</label>
+                  {certUrl && (
+                    <div style={{ marginBottom: 10 }}>
+                      {/\.(jpe?g|png|webp|gif)$/i.test(certUrl) ? (
+                        <div style={{ border: '1px solid #e2ddd0', padding: 4, display: 'inline-block', marginBottom: 6 }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={certUrl} alt="Resale Certificate" style={{ maxWidth: '100%', maxHeight: 200, objectFit: 'contain', display: 'block' }} />
+                        </div>
+                      ) : (
+                        <a href={certUrl} target="_blank" rel="noopener noreferrer" className="text-sm inline-flex items-center gap-1.5" style={{ color: '#e63946', textDecoration: 'underline', display: 'block', marginBottom: 6 }}>
+                          📄 View Certificate (PDF)
+                        </a>
+                      )}
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={e => setCertFile(e.target.files?.[0] ?? null)}
+                    style={{ fontSize: 12, color: '#555' }}
+                  />
+                  {certFile && <p className="text-xs mt-1" style={{ color: '#4a7a4a' }}>Ready to upload: {certFile.name}</p>}
+                </div>
+                <button
+                  type="button"
+                  onClick={saveDocs}
+                  disabled={savingDocs}
+                  className="px-6 py-3 text-xs tracking-widest uppercase font-semibold disabled:opacity-40"
+                  style={{ background: '#1E3A1E', color: '#ffffff' }}
+                >
+                  {savingDocs ? 'Saving...' : 'Save Documents'}
+                </button>
               </div>
             </div>
           </div>
