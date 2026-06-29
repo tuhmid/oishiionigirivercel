@@ -1,7 +1,7 @@
 // components/public/OrderPageClient.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import type { Flavor } from '@/types'
 import { RETAIL_PRICE } from '@/lib/pricing'
 
@@ -24,11 +24,27 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
     address: '',
     notes: '',
   })
-  const [tip, setTip] = useState<number>(0)
-  const [customTip, setCustomTip] = useState('')
-  const [tipMode, setTipMode] = useState<'0' | '1' | '2' | '3' | 'custom'>('0')
+  const [addressSuggestions, setAddressSuggestions] = useState<string[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const addressDebounce = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const fetchAddressSuggestions = (val: string) => {
+    if (addressDebounce.current) clearTimeout(addressDebounce.current)
+    if (val.length < 4) { setAddressSuggestions([]); return }
+    addressDebounce.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(val)}&limit=5&countrycodes=us`,
+          { headers: { 'Accept-Language': 'en' } }
+        )
+        const data = await res.json()
+        setAddressSuggestions(data.map((d: { display_name: string }) => d.display_name))
+        setShowSuggestions(true)
+      } catch { setAddressSuggestions([]) }
+    }, 400)
+  }
 
   const adjustQty = (id: string, delta: number) => {
     setQuantities((prev) => ({
@@ -42,21 +58,10 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
   }
 
   const selectedItems = flavors.filter((f) => (quantities[f.id] ?? 0) > 0)
-  const subtotal = selectedItems.reduce(
+  const total = selectedItems.reduce(
     (sum, f) => sum + RETAIL_PRICE * (quantities[f.id] ?? 0),
     0
   )
-  const total = subtotal + tip
-
-  const handleTipMode = (mode: '0' | '1' | '2' | '3' | 'custom') => {
-    setTipMode(mode)
-    if (mode === 'custom') {
-      setTip(parseFloat(customTip) || 0)
-    } else {
-      setTip(Number(mode))
-      setCustomTip('')
-    }
-  }
 
   const handleCheckout = async () => {
     setError(null)
@@ -93,9 +98,9 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
           customer_name: form.name,
           customer_email: form.email,
           customer_phone: form.phone || undefined,
+          customer_address: form.address || undefined,
           type: fulfillment,
           notes: form.notes || undefined,
-          tip_amount: tip > 0 ? tip : undefined,
           items,
         }),
       })
@@ -303,7 +308,9 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
 
                     {/* Footer: stepper or unavailable */}
                     <div className="flavor-card-footer">
-                      {flavor.in_stock ? (
+                      {flavor.in_stock && fulfillment === 'delivery' ? (
+                        <span className="t-muted t-body-sm">Select on Square →</span>
+                      ) : flavor.in_stock ? (
                         <div className="stepper">
                           <button
                             type="button"
@@ -365,81 +372,11 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               </p>
             )}
 
-            {/* Subtotal + tip + total */}
-            {tip > 0 && (
-              <div className="order-total" style={{ marginBottom: '4px', opacity: 0.6, fontWeight: 400 }}>
-                <span style={{ fontSize: 'var(--text-sm)' }}>Subtotal</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}>${subtotal.toFixed(2)}</span>
-              </div>
-            )}
-            {tip > 0 && (
-              <div className="order-total" style={{ marginBottom: '4px', opacity: 0.6, fontWeight: 400 }}>
-                <span style={{ fontSize: 'var(--text-sm)' }}>Tip</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}>${tip.toFixed(2)}</span>
-              </div>
-            )}
             <div className="order-total" style={{ marginBottom: '12px' }}>
               <span style={{ fontWeight: 600 }}>Total</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--seaweed)' }}>
                 ${total.toFixed(2)}
               </span>
-            </div>
-
-            {/* Tip selector */}
-            <div style={{ marginBottom: '4px' }}>
-              <p className="form-label" style={{ marginBottom: '8px' }}>Add a tip (optional)</p>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {(['0', '1', '2', '3'] as const).map((amt) => (
-                  <button
-                    key={amt}
-                    type="button"
-                    onClick={() => handleTipMode(amt)}
-                    style={{
-                      padding: '5px 12px',
-                      fontSize: 'var(--text-xs)',
-                      border: '1px solid',
-                      borderColor: tipMode === amt ? 'var(--seaweed)' : 'var(--border)',
-                      background: tipMode === amt ? 'var(--seaweed)' : 'transparent',
-                      color: tipMode === amt ? '#fff' : 'var(--ink)',
-                      cursor: 'pointer',
-                      borderRadius: 2,
-                    }}
-                  >
-                    {amt === '0' ? 'No tip' : `$${amt}`}
-                  </button>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => handleTipMode('custom')}
-                  style={{
-                    padding: '5px 12px',
-                    fontSize: 'var(--text-xs)',
-                    border: '1px solid',
-                    borderColor: tipMode === 'custom' ? 'var(--seaweed)' : 'var(--border)',
-                    background: tipMode === 'custom' ? 'var(--seaweed)' : 'transparent',
-                    color: tipMode === 'custom' ? '#fff' : 'var(--ink)',
-                    cursor: 'pointer',
-                    borderRadius: 2,
-                  }}
-                >
-                  Custom
-                </button>
-              </div>
-              {tipMode === 'custom' && (
-                <input
-                  type="number"
-                  min={0}
-                  step={0.01}
-                  className="input"
-                  placeholder="Enter tip amount"
-                  value={customTip}
-                  onChange={(e) => {
-                    setCustomTip(e.target.value)
-                    setTip(parseFloat(e.target.value) || 0)
-                  }}
-                  style={{ marginTop: '8px', maxWidth: '160px' }}
-                />
-              )}
             </div>
 
             <hr className="divider" />
@@ -524,6 +461,52 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
                   }
                   autoComplete="tel"
                 />
+              </div>
+
+              <div className="form-group" style={{ position: 'relative' }}>
+                <label htmlFor="order-address" className="form-label">
+                  Your Address
+                </label>
+                <input
+                  id="order-address"
+                  type="text"
+                  className="input"
+                  placeholder="123 Atlantic Ave, Brooklyn, NY"
+                  value={form.address}
+                  onChange={(e) => {
+                    setForm((prev) => ({ ...prev, address: e.target.value }))
+                    fetchAddressSuggestions(e.target.value)
+                  }}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                  autoComplete="off"
+                />
+                {showSuggestions && addressSuggestions.length > 0 && (
+                  <div style={{
+                    position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50,
+                    background: '#fff', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                  }}>
+                    {addressSuggestions.map((s, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onMouseDown={() => {
+                          setForm((prev) => ({ ...prev, address: s }))
+                          setShowSuggestions(false)
+                        }}
+                        style={{
+                          display: 'block', width: '100%', textAlign: 'left',
+                          padding: '8px 12px', fontSize: 'var(--text-xs)',
+                          color: 'var(--ink)', background: 'none', border: 'none',
+                          borderBottom: '1px solid var(--border)', cursor: 'pointer',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
