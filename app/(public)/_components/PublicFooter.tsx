@@ -27,6 +27,7 @@ export default function PublicFooter() {
             <li><Link href="/" className="pub-footer-link">Home</Link></li>
             <li><Link href="/order" className="pub-footer-link">Order</Link></li>
             <li><Link href="/wholesale" className="pub-footer-link">Wholesale</Link></li>
+            <li><a href="https://maps.app.goo.gl/BrATC8LA94MnbpYS6" target="_blank" rel="noopener noreferrer" className="pub-footer-link">Locations</a></li>
           </ul>
         </div>
 
