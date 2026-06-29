@@ -74,7 +74,6 @@ export default async function OrderSuccessPage({
             <li className="t-body-sm">✓ Check your email for a Square receipt</li>
             <li className="t-body-sm">✓ We&apos;ll reach out shortly to confirm details</li>
             <li className="t-body-sm">✓ Pickup or delivery arranged by our team</li>
-            <li className="t-body-sm">✓ Keep refrigerated — enjoy within 2 days</li>
           </ul>
           {referenceId && (
             <p
@@ -95,8 +94,11 @@ export default async function OrderSuccessPage({
           <Link href="/" className="btn btn-outline btn-full">Back to Home</Link>
         </div>
 
-        <p style={{ marginTop: 24, fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--ink-20)' }}>
-          276 Chestnut Street · Brooklyn 11208 · Keep refrigerated
+        <p style={{ marginTop: 24, fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--ink-50)' }}>
+          276 Chestnut Street · Brooklyn 11208
+        </p>
+        <p style={{ marginTop: 8, fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', color: 'var(--ink-50)' }}>
+          Keep refrigerated — enjoy within 2 days
         </p>
       </div>
     </main>
