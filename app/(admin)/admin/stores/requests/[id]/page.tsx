@@ -19,6 +19,7 @@ interface Request {
   cert_authority_number: string | null
   resale_cert_url: string | null
   message: string | null
+  preferred_payment_method: string | null
   status: string
   created_at: string
 }
@@ -70,6 +71,7 @@ export default function RequestDetailPage() {
         address: req.address ?? null,
         active: true,
         notes: req.message ?? null,
+        preferred_payment_method: req.preferred_payment_method ?? null,
         billable_name: req.billable_name ?? null,
         billable_address: req.billable_address ?? null,
         cert_authority_number: req.cert_authority_number ?? null,
@@ -147,6 +149,7 @@ export default function RequestDetailPage() {
             <Field label="Store Name" value={req.store_name} />
             <Field label="Address" value={req.address} />
             <Field label="Notes / Message" value={req.message} />
+            <Field label="Preferred Payment" value={req.preferred_payment_method} />
           </div>
         </div>
 

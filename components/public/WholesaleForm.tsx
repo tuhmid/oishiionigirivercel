@@ -16,6 +16,7 @@ interface FormState {
   billableAddress: string
   certAuthorityNumber: string
   message: string
+  preferredPayment: string
 }
 
 const INITIAL: FormState = {
@@ -29,6 +30,7 @@ const INITIAL: FormState = {
   billableAddress: '',
   certAuthorityNumber: '',
   message: '',
+  preferredPayment: '',
 }
 
 export default function WholesaleForm() {
@@ -39,7 +41,7 @@ export default function WholesaleForm() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
   }
@@ -95,6 +97,7 @@ export default function WholesaleForm() {
       cert_authority_number: form.certAuthorityNumber || null,
       resale_cert_url: resaleCertUrl,
       message: form.message || null,
+      preferred_payment_method: form.preferredPayment || null,
       status: 'new',
     })
 
@@ -159,6 +162,17 @@ export default function WholesaleForm() {
         <label className="form-label" htmlFor="ws-street">Store Address</label>
         <input id="ws-street" name="street" className="input" value={form.street} onChange={handleChange} placeholder="123 Atlantic Ave" style={{ marginBottom: 8 }} />
         <input id="ws-neighborhood" name="neighborhood" className="input" value={form.neighborhood} onChange={handleChange} placeholder="Neighborhood (e.g. Bed-Stuy, Bushwick)" aria-label="Neighborhood" />
+      </div>
+
+      <div className="form-group">
+        <label className="form-label" htmlFor="ws-preferredPayment">Preferred Payment Method</label>
+        <select id="ws-preferredPayment" name="preferredPayment" className="input" value={form.preferredPayment} onChange={handleChange}>
+          <option value="">Select a method…</option>
+          <option value="cash">Cash</option>
+          <option value="check">Check</option>
+          <option value="zelle">Zelle</option>
+          <option value="square">Square</option>
+        </select>
       </div>
 
       {/* ── Billing info ── */}
