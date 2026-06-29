@@ -26,6 +26,10 @@ export interface Store {
   notes: string | null
   active: boolean
   delivery_days: string[]
+  billable_name: string | null
+  billable_address: string | null
+  cert_authority_number: string | null
+  resale_cert_url: string | null
   created_at: string
   contacts?: StoreContact[]
   allocations?: StoreFlavorAllocation[]

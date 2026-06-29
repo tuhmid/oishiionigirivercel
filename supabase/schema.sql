@@ -32,6 +32,10 @@ create table stores (
   notes                    text,
   active                   boolean default true,
   delivery_days            text[] default '{}',
+  billable_name            text,
+  billable_address         text,
+  cert_authority_number    text,
+  resale_cert_url          text,
   created_at               timestamptz default now()
 );
 

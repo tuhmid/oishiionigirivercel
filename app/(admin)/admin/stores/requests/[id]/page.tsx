@@ -70,6 +70,10 @@ export default function RequestDetailPage() {
         address: req.address ?? null,
         active: true,
         notes: req.message ?? null,
+        billable_name: req.billable_name ?? null,
+        billable_address: req.billable_address ?? null,
+        cert_authority_number: req.cert_authority_number ?? null,
+        resale_cert_url: req.resale_cert_url ?? null,
       })
       .select()
       .single()
