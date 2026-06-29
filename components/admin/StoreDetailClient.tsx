@@ -735,18 +735,16 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
                     </div>
                     <button
                       type="button"
-                      title="Delete batch"
                       onClick={async () => {
                         if (!window.confirm('Delete this batch? This cannot be undone.')) return
                         const supabase = createClient()
                         await supabase.from('batches').delete().eq('id', batch.id)
                         router.refresh()
                       }}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c8c4b8', padding: 4, display: 'flex', alignItems: 'center' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#e63946')}
-                      onMouseLeave={e => (e.currentTarget.style.color = '#c8c4b8')}
+                      className="flex items-center gap-1 text-xs font-semibold px-2 py-1"
+                      style={{ background: '#fce8e8', color: '#e63946', border: '1px solid #f5c0c0', cursor: 'pointer' }}
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={12} /> Delete
                     </button>
                   </div>
                 </div>
