@@ -69,8 +69,8 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
       setError('Please enter your name.')
       return
     }
-    if (!form.email.trim()) {
-      setError('Please enter your email.')
+    if (!form.phone.trim()) {
+      setError('Please enter your phone number.')
       return
     }
 
@@ -90,8 +90,8 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customer_name: form.name,
-          customer_email: form.email,
-          customer_phone: form.phone || undefined,
+          customer_email: form.email || undefined,
+          customer_phone: form.phone,
           type: fulfillment,
           notes: form.notes || undefined,
           tip_amount: tip > 0 ? tip : undefined,
@@ -424,7 +424,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               </div>
 
               <div className="form-group">
-                <label htmlFor="order-email" className="form-label form-label-required">
+                <label htmlFor="order-email" className="form-label">
                   Email
                 </label>
                 <input
@@ -441,7 +441,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               </div>
 
               <div className="form-group">
-                <label htmlFor="order-phone" className="form-label">
+                <label htmlFor="order-phone" className="form-label form-label-required">
                   Phone
                 </label>
                 <input
