@@ -62,7 +62,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
     setError(null)
 
     if (fulfillment === 'delivery') {
-      window.location.href = 'https://oishiionigirinyc.square.site/'
+      window.location.href = 'https://oishiionigirinyc.square.site/?location='
       return
     }
 
