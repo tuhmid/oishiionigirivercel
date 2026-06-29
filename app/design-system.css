@@ -446,9 +446,13 @@
 }
 .hero-eyebrow {
   display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-6);
-  white-space: nowrap;
+  white-space: nowrap; max-width: 100%;
 }
 .hero-eyebrow-line { width: 32px; height: 1.5px; background: var(--seaweed); flex-shrink: 0; }
+@media (max-width: 767px) {
+  .hero-eyebrow .hero-eyebrow-line { display: none; }
+  .hero-eyebrow .t-label { letter-spacing: 0.18em; font-size: 0.8125rem; }
+}
 .hero-ctas {
   display: flex; flex-direction: column; gap: var(--sp-3);
   width: 100%; max-width: 320px;
