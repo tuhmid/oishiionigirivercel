@@ -14,24 +14,27 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { customer_name, customer_email, customer_phone, type, delivery_address, notes, tip_amount, items } = body
 
-    const lineItems = items.map((item: { flavor_id: string; name: string; quantity: number }) => ({
+    const lineItems = items.map((item: { flavor_id: string; name: string; quantity: number }, i: number) => ({
+      uid: `item-${i}`,
       name: `OISHII ONIGIRI — ${item.name ?? 'Onigiri'}`,
       quantity: String(item.quantity),
       basePriceMoney: {
         amount: BigInt(Math.round(RETAIL_PRICE * 100)),
         currency: 'USD',
       },
+      appliedTaxes: [{ taxUid: 'nysales' }],
     }))
 
     if (tip_amount && tip_amount > 0) {
       lineItems.push({
+        uid: 'tip',
         name: 'Tip',
         quantity: '1',
         basePriceMoney: {
           amount: BigInt(Math.round(tip_amount * 100)),
           currency: 'USD',
         },
-      })
+      } as typeof lineItems[0])
     }
 
     const formatPhone = (p: string) => {
@@ -49,6 +52,12 @@ export async function POST(req: NextRequest) {
       order: {
         locationId: process.env.SQUARE_LOCATION_ID!,
         lineItems,
+        taxes: [{
+          uid: 'nysales',
+          name: 'NYC Sales Tax (8.875%)',
+          percentage: '8.875',
+          scope: 'LINE_ITEM',
+        }],
         metadata: Object.fromEntries(
           Object.entries({
             customer_name: customer_name || null,
