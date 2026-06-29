@@ -200,6 +200,11 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
           cursor: not-allowed;
           pointer-events: none;
         }
+        .stepper-value::-webkit-outer-spin-button,
+        .stepper-value::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
         .order-summary .input,
         .order-summary .textarea,
         .order-summary .select {
@@ -420,7 +425,22 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
                           >
                             −
                           </button>
-                          <span className="stepper-value">{qty}</span>
+                          <input
+                            type="number"
+                            min={0}
+                            className="stepper-value"
+                            value={qty === 0 ? '' : qty}
+                            placeholder="0"
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value, 10)
+                              setQuantities((prev) => ({ ...prev, [flavor.id]: isNaN(val) || val < 0 ? 0 : val }))
+                            }}
+                            onBlur={(e) => {
+                              if (e.target.value === '') setQuantities((prev) => ({ ...prev, [flavor.id]: 0 }))
+                            }}
+                            aria-label={`${flavor.name} quantity`}
+                            style={{ width: 40, textAlign: 'center', border: 'none', background: 'transparent', fontFamily: 'inherit', fontSize: 'inherit', fontWeight: 'inherit', outline: 'none', MozAppearance: 'textfield' } as React.CSSProperties}
+                          />
                           <button
                             type="button"
                             className="stepper-btn"
