@@ -424,10 +424,14 @@
 .hero {
   height: 100svh;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center; text-align: center;
-  padding: var(--sp-16) var(--gutter) var(--sp-10);
+  align-items: center; justify-content: flex-start; text-align: center;
+  padding: calc(60px + var(--sp-8)) var(--gutter) var(--sp-10);
   position: relative; overflow: hidden; background: transparent;
 }
+@media (min-width: 768px) {
+  .hero { justify-content: center; padding-top: var(--sp-16); }
+}
+.hero-halal { display: block; margin-inline: auto; }
 .hero-grid {
   position: absolute; inset: 0;
   background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
