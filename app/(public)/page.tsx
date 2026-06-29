@@ -164,7 +164,143 @@ export default async function HomePage() {
         overflow: 'hidden',
       }}>
 
-      {/* ── 2. FEATURED FLAVORS ─────────────────────────────────── */}
+      {/* ── 2. ABOUT ────────────────────────────────────────────── */}
+      <section
+        className="section"
+        style={{ background: 'var(--ink)', color: 'var(--paper)' }}
+      >
+        <div className="container">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+              gap: 'var(--sp-16)',
+              alignItems: 'center',
+            }}
+          >
+            {/* Left — logo */}
+            <div
+              className="reveal"
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
+              <img
+                src="/logo.png"
+                alt="Oishii Onigiri mascot"
+                width={180}
+                height={180}
+                style={{
+                  width: 180,
+                  height: 180,
+                  objectFit: 'contain',
+                  opacity: 0.85,
+                  animation: 'mascot-float 3s ease-in-out infinite',
+                }}
+              />
+            </div>
+
+            {/* Right — text */}
+            <div className="reveal">
+              <p
+                className="t-label"
+                style={{ color: 'var(--seaweed-mid)', marginBottom: 'var(--sp-4)' }}
+              >
+                Our Story
+              </p>
+              <h2 style={{ color: 'var(--paper)', marginBottom: 'var(--sp-6)' }}>
+                Fresh Everyday
+              </h2>
+              <p
+                className="t-body"
+                style={{
+                  color: 'rgba(250,248,243,0.7)',
+                  maxWidth: 520,
+                  lineHeight: 'var(--leading-relaxed)',
+                }}
+              >
+                We make handcrafted Japanese rice balls from quality ingredients, fresh for
+                Brooklyn&rsquo;s neighborhood stores and direct to you. Every onigiri is
+                rolled by hand, packed with care, and delivered while it&rsquo;s still at
+                its best.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. HOW IT WORKS ─────────────────────────────────────── */}
+      <section className="section" style={{ background: 'var(--paper)' }}>
+        <div className="container">
+          <div
+            className="reveal"
+            style={{ textAlign: 'center', marginBottom: 'var(--sp-12)' }}
+          >
+            <p className="t-label" style={{ marginBottom: 'var(--sp-4)' }}>
+              Simple Process
+            </p>
+            <h2>Order Yours</h2>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: 'var(--sp-8)',
+              marginBottom: 'var(--sp-12)',
+            }}
+          >
+            {[
+              {
+                num: '01',
+                title: 'Browse & Order',
+                body: 'Pick your favourite flavors and place an order through our menu — easy and fast.',
+              },
+              {
+                num: '02',
+                title: 'We Prepare Fresh',
+                body: 'Each onigiri is hand-rolled with quality ingredients in our Brooklyn kitchen.',
+              },
+              {
+                num: '03',
+                title: 'Pickup or Delivery',
+                body: 'Collect from your nearest partner store or have them delivered to your door.',
+              },
+            ].map((step) => (
+              <div
+                key={step.num}
+                className="reveal"
+                style={{
+                  padding: 'var(--sp-6)',
+                  border: '1.5px solid var(--border)',
+                  background: 'var(--surface)',
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'var(--text-4xl)',
+                    color: 'var(--border)',
+                    lineHeight: 1,
+                    marginBottom: 'var(--sp-4)',
+                  }}
+                  aria-hidden="true"
+                >
+                  {step.num}
+                </p>
+                <h3 style={{ marginBottom: 'var(--sp-3)' }}>{step.title}</h3>
+                <p className="t-body-sm t-muted">{step.body}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="reveal" style={{ textAlign: 'center' }}>
+            <Link href="/order" className="btn btn-green btn-lg">
+              Order Now
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. FEATURED FLAVORS ─────────────────────────────────── */}
       <section
         className="section"
         style={{ background: 'var(--paper-warm)' }}
@@ -253,142 +389,6 @@ export default async function HomePage() {
               }}
             >
               See full menu &amp; order &rarr;
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3. ABOUT ────────────────────────────────────────────── */}
-      <section
-        className="section"
-        style={{ background: 'var(--ink)', color: 'var(--paper)' }}
-      >
-        <div className="container">
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
-              gap: 'var(--sp-16)',
-              alignItems: 'center',
-            }}
-          >
-            {/* Left — logo */}
-            <div
-              className="reveal"
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <img
-                src="/logo.png"
-                alt="Oishii Onigiri mascot"
-                width={180}
-                height={180}
-                style={{
-                  width: 180,
-                  height: 180,
-                  objectFit: 'contain',
-                  opacity: 0.85,
-                  animation: 'mascot-float 3s ease-in-out infinite',
-                }}
-              />
-            </div>
-
-            {/* Right — text */}
-            <div className="reveal">
-              <p
-                className="t-label"
-                style={{ color: 'var(--seaweed-mid)', marginBottom: 'var(--sp-4)' }}
-              >
-                Our Story
-              </p>
-              <h2 style={{ color: 'var(--paper)', marginBottom: 'var(--sp-6)' }}>
-                Fresh Everyday
-              </h2>
-              <p
-                className="t-body"
-                style={{
-                  color: 'rgba(250,248,243,0.7)',
-                  maxWidth: 520,
-                  lineHeight: 'var(--leading-relaxed)',
-                }}
-              >
-                We make handcrafted Japanese rice balls from quality ingredients, fresh for
-                Brooklyn&rsquo;s neighborhood stores and direct to you. Every onigiri is
-                rolled by hand, packed with care, and delivered while it&rsquo;s still at
-                its best.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. HOW IT WORKS ─────────────────────────────────────── */}
-      <section className="section" style={{ background: 'var(--paper)' }}>
-        <div className="container">
-          <div
-            className="reveal"
-            style={{ textAlign: 'center', marginBottom: 'var(--sp-12)' }}
-          >
-            <p className="t-label" style={{ marginBottom: 'var(--sp-4)' }}>
-              Simple Process
-            </p>
-            <h2>Order Yours</h2>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: 'var(--sp-8)',
-              marginBottom: 'var(--sp-12)',
-            }}
-          >
-            {[
-              {
-                num: '01',
-                title: 'Browse & Order',
-                body: 'Pick your favourite flavors and place an order through our menu — easy and fast.',
-              },
-              {
-                num: '02',
-                title: 'We Prepare Fresh',
-                body: 'Each onigiri is hand-rolled with quality ingredients in our Brooklyn kitchen.',
-              },
-              {
-                num: '03',
-                title: 'Pickup or Delivery',
-                body: 'Collect from your nearest partner store or have them delivered to your door.',
-              },
-            ].map((step) => (
-              <div
-                key={step.num}
-                className="reveal"
-                style={{
-                  padding: 'var(--sp-6)',
-                  border: '1.5px solid var(--border)',
-                  background: 'var(--surface)',
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'var(--text-4xl)',
-                    color: 'var(--border)',
-                    lineHeight: 1,
-                    marginBottom: 'var(--sp-4)',
-                  }}
-                  aria-hidden="true"
-                >
-                  {step.num}
-                </p>
-                <h3 style={{ marginBottom: 'var(--sp-3)' }}>{step.title}</h3>
-                <p className="t-body-sm t-muted">{step.body}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="reveal" style={{ textAlign: 'center' }}>
-            <Link href="/order" className="btn btn-green btn-lg">
-              Order Now
             </Link>
           </div>
         </div>
