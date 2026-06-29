@@ -17,6 +17,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [openIngredients, setOpenIngredients] = useState<Record<string, boolean>>({})
   const [fulfillment, setFulfillment] = useState<'pickup' | 'delivery'>('pickup')
+  const [fulfillmentChosen, setFulfillmentChosen] = useState(false)
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -28,6 +29,15 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
   const [tipMode, setTipMode] = useState<'0' | '1' | '2' | '3' | 'custom'>('0')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const chooseFulfillment = (choice: 'pickup' | 'delivery') => {
+    if (choice === 'delivery') {
+      window.location.href = 'https://oishiionigirinyc.square.site/?location='
+      return
+    }
+    setFulfillment('pickup')
+    setFulfillmentChosen(true)
+  }
 
   const handleTipMode = (mode: '0' | '1' | '2' | '3' | 'custom') => {
     setTipMode(mode)
@@ -59,11 +69,6 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
 
   const handleCheckout = async () => {
     setError(null)
-
-    if (fulfillment === 'delivery') {
-      window.location.href = 'https://oishiionigirinyc.square.site/?location='
-      return
-    }
 
     if (!form.name.trim()) {
       setError('Please enter your name.')
@@ -116,6 +121,57 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
   return (
     <>
       <style>{`
+        .fulfillment-modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(10, 10, 10, 0.72);
+          backdrop-filter: blur(4px);
+          z-index: 100;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+        }
+        .fulfillment-modal {
+          background: var(--paper);
+          border: 1.5px solid var(--border);
+          max-width: 480px;
+          width: 100%;
+          padding: 40px 32px;
+          text-align: center;
+        }
+        .fulfillment-choice-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          padding: 24px 20px;
+          border: 1.5px solid var(--border);
+          background: var(--surface);
+          cursor: pointer;
+          transition: border-color 0.15s, background 0.15s;
+          flex: 1;
+        }
+        .fulfillment-choice-btn:hover {
+          border-color: var(--seaweed);
+          background: var(--paper-warm);
+        }
+        .fulfillment-choice-icon {
+          font-size: 32px;
+          line-height: 1;
+        }
+        .fulfillment-choice-title {
+          font-family: var(--font-display);
+          font-size: var(--text-lg);
+          color: var(--ink);
+          letter-spacing: var(--tracking-wide);
+          text-transform: uppercase;
+        }
+        .fulfillment-choice-sub {
+          font-size: var(--text-xs);
+          color: var(--ink-40);
+          letter-spacing: var(--tracking-wide);
+        }
         .order-layout {
           display: grid;
           grid-template-columns: 1fr;
@@ -164,6 +220,36 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
           margin-block: var(--sp-4);
         }
       `}</style>
+
+      {/* ── Fulfillment choice modal ── */}
+      {!fulfillmentChosen && (
+        <div className="fulfillment-modal-overlay">
+          <div className="fulfillment-modal">
+            <img
+              src="/logo.png"
+              alt=""
+              aria-hidden="true"
+              style={{ width: 56, height: 56, objectFit: 'contain', marginBottom: 16, opacity: 0.8 }}
+            />
+            <h2 style={{ marginBottom: 8 }}>How would you like to order?</h2>
+            <p className="t-body-sm t-muted" style={{ marginBottom: 28 }}>
+              Choose pickup or delivery to get started.
+            </p>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button type="button" className="fulfillment-choice-btn" onClick={() => chooseFulfillment('pickup')}>
+                <span className="fulfillment-choice-icon">🏪</span>
+                <span className="fulfillment-choice-title">Pickup</span>
+                <span className="fulfillment-choice-sub">Select location</span>
+              </button>
+              <button type="button" className="fulfillment-choice-btn" onClick={() => chooseFulfillment('delivery')}>
+                <span className="fulfillment-choice-icon">🛵</span>
+                <span className="fulfillment-choice-title">Delivery</span>
+                <span className="fulfillment-choice-sub">Via Square Online</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container">
         <div className="order-layout">
@@ -397,7 +483,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
                     className="radio-input check-input"
                     name="fulfillment"
                     checked={fulfillment === 'delivery'}
-                    onChange={() => setFulfillment('delivery')}
+                    onChange={() => chooseFulfillment('delivery')}
                   />
                   <span className="check-label">Delivery</span>
                 </label>
