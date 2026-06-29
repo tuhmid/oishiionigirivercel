@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
-import { Printer, Send, Check, ArrowLeft } from 'lucide-react'
+import { Printer, Send, Check, ArrowLeft, Trash2 } from 'lucide-react'
 import { formatDate, formatCurrency } from '@/lib/utils'
 import { WHOLESALE_PRICE } from '@/lib/pricing'
 
@@ -240,6 +240,19 @@ export default function BatchDetailClient({ batch: initial }: { batch: Batch }) 
           >
             <Printer size={12} /> Receipt
           </Link>
+          <button
+            type="button"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs tracking-widest uppercase font-semibold"
+            style={{ border: '1px solid #f5c0c0', background: '#fce8e8', color: '#e63946', cursor: 'pointer' }}
+            onClick={async () => {
+              if (!window.confirm('Delete this batch? This cannot be undone.')) return
+              const supabase = createClient()
+              await supabase.from('batches').delete().eq('id', batch.id)
+              router.push('/admin/deliveries')
+            }}
+          >
+            <Trash2 size={12} /> Delete
+          </button>
         </div>
       </div>
 
