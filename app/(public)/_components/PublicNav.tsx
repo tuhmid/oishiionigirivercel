@@ -137,7 +137,7 @@ export default function PublicNav() {
           rel="noopener noreferrer"
           className="pub-nav-drawer-link"
         >
-          Location
+          Locations
         </a>
         <div style={{ marginTop: 'var(--sp-8)' }}>
           <Link href="/order" className="btn btn-green btn-full">
