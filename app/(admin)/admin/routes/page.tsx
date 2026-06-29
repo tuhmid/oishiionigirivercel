@@ -38,6 +38,7 @@ export default async function RoutesPage() {
   type RawStop = {
     storeId: string; storeName: string; address: string | null
     hours: Record<string, { open: string; close: string }> | null
+    open247: boolean
     batchId: string; scheduledTime: string | null
     invoiceId: string | null; invoiceAmount: number | null; invoicePaid: boolean
   }
