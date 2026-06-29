@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         : SquareEnvironment.Sandbox,
     })
     const body = await req.json()
-    const { customer_name, customer_email, customer_phone, type, delivery_address, notes, items } = body
+    const { customer_name, customer_email, customer_phone, type, delivery_address, notes, tip_amount, items } = body
 
     const supabase = await createClient()
 
@@ -35,6 +35,17 @@ export async function POST(req: NextRequest) {
         currency: 'USD',
       },
     }))
+
+    if (tip_amount && tip_amount > 0) {
+      lineItems.push({
+        name: 'Tip',
+        quantity: '1',
+        basePriceMoney: {
+          amount: BigInt(Math.round(tip_amount * 100)),
+          currency: 'USD',
+        },
+      })
+    }
 
     const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_URL
 

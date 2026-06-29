@@ -24,6 +24,9 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
     address: '',
     notes: '',
   })
+  const [tip, setTip] = useState<number>(0)
+  const [customTip, setCustomTip] = useState('')
+  const [tipMode, setTipMode] = useState<'0' | '1' | '2' | '3' | 'custom'>('0')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -39,10 +42,21 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
   }
 
   const selectedItems = flavors.filter((f) => (quantities[f.id] ?? 0) > 0)
-  const total = selectedItems.reduce(
+  const subtotal = selectedItems.reduce(
     (sum, f) => sum + RETAIL_PRICE * (quantities[f.id] ?? 0),
     0
   )
+  const total = subtotal + tip
+
+  const handleTipMode = (mode: '0' | '1' | '2' | '3' | 'custom') => {
+    setTipMode(mode)
+    if (mode === 'custom') {
+      setTip(parseFloat(customTip) || 0)
+    } else {
+      setTip(Number(mode))
+      setCustomTip('')
+    }
+  }
 
   const handleCheckout = async () => {
     setError(null)
@@ -82,6 +96,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
           delivery_address:
             fulfillment === 'delivery' ? form.address : undefined,
           notes: form.notes || undefined,
+          tip_amount: tip > 0 ? tip : undefined,
           items,
         }),
       })
@@ -351,18 +366,81 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               </p>
             )}
 
-            {/* Total */}
-            <div className="order-total" style={{ marginBottom: '4px' }}>
+            {/* Subtotal + tip + total */}
+            {tip > 0 && (
+              <div className="order-total" style={{ marginBottom: '4px', opacity: 0.6, fontWeight: 400 }}>
+                <span style={{ fontSize: 'var(--text-sm)' }}>Subtotal</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}>${subtotal.toFixed(2)}</span>
+              </div>
+            )}
+            {tip > 0 && (
+              <div className="order-total" style={{ marginBottom: '4px', opacity: 0.6, fontWeight: 400 }}>
+                <span style={{ fontSize: 'var(--text-sm)' }}>Tip</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}>${tip.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="order-total" style={{ marginBottom: '12px' }}>
               <span style={{ fontWeight: 600 }}>Total</span>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontWeight: 700,
-                  color: 'var(--seaweed)',
-                }}
-              >
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--seaweed)' }}>
                 ${total.toFixed(2)}
               </span>
+            </div>
+
+            {/* Tip selector */}
+            <div style={{ marginBottom: '4px' }}>
+              <p className="form-label" style={{ marginBottom: '8px' }}>Add a tip (optional)</p>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {(['0', '1', '2', '3'] as const).map((amt) => (
+                  <button
+                    key={amt}
+                    type="button"
+                    onClick={() => handleTipMode(amt)}
+                    style={{
+                      padding: '5px 12px',
+                      fontSize: 'var(--text-xs)',
+                      border: '1px solid',
+                      borderColor: tipMode === amt ? 'var(--seaweed)' : 'var(--border)',
+                      background: tipMode === amt ? 'var(--seaweed)' : 'transparent',
+                      color: tipMode === amt ? '#fff' : 'var(--ink)',
+                      cursor: 'pointer',
+                      borderRadius: 2,
+                    }}
+                  >
+                    {amt === '0' ? 'No tip' : `$${amt}`}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => handleTipMode('custom')}
+                  style={{
+                    padding: '5px 12px',
+                    fontSize: 'var(--text-xs)',
+                    border: '1px solid',
+                    borderColor: tipMode === 'custom' ? 'var(--seaweed)' : 'var(--border)',
+                    background: tipMode === 'custom' ? 'var(--seaweed)' : 'transparent',
+                    color: tipMode === 'custom' ? '#fff' : 'var(--ink)',
+                    cursor: 'pointer',
+                    borderRadius: 2,
+                  }}
+                >
+                  Custom
+                </button>
+              </div>
+              {tipMode === 'custom' && (
+                <input
+                  type="number"
+                  min={0}
+                  step={0.01}
+                  className="input"
+                  placeholder="Enter tip amount"
+                  value={customTip}
+                  onChange={(e) => {
+                    setCustomTip(e.target.value)
+                    setTip(parseFloat(e.target.value) || 0)
+                  }}
+                  style={{ marginTop: '8px', maxWidth: '160px' }}
+                />
+              )}
             </div>
 
             <hr className="divider" />
@@ -503,7 +581,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               disabled={total === 0 || loading}
               onClick={handleCheckout}
             >
-              {loading ? '' : `Checkout — $${total.toFixed(2)}`}
+              {loading ? '' : `Checkout — $${total.toFixed(2)}${tip > 0 ? ` (incl. $${tip.toFixed(2)} tip)` : ''}`}
             </button>
 
             <p
