@@ -134,21 +134,13 @@ export default function RoutesClient({ days: initialDays }: { days: RouteDay[] }
                 {saving === day.date && <span className="ml-2" style={{ color: '#aaaaaa' }}>· saving…</span>}
               </p>
             </div>
-            <button
-              onClick={() => saveTimes(day.date, day.routePlanId)}
-              disabled={saving === day.date}
-              className="text-xs tracking-widest uppercase px-3 py-1.5 transition-colors disabled:opacity-40 hover:bg-[#f0ece0]"
-              style={{ border: '1px solid #c8c4b8', color: '#555555' }}
-            >
-              Save Times
-            </button>
           </div>
 
           {/* Column header */}
           <div
             className="grid text-xs tracking-widest uppercase px-4 py-2"
             style={{
-              gridTemplateColumns: '20px 28px 1fr 90px auto',
+              gridTemplateColumns: '20px 28px 1fr auto',
               gap: '10px',
               color: '#c8c4b8',
               borderBottom: '1px solid #f0ece0',
@@ -157,7 +149,6 @@ export default function RoutesClient({ days: initialDays }: { days: RouteDay[] }
             <span />
             <span>#</span>
             <span>Store</span>
-            <span>Arrive</span>
             <span>Docs</span>
           </div>
 
@@ -178,7 +169,7 @@ export default function RoutesClient({ days: initialDays }: { days: RouteDay[] }
                 onDragEnd={() => handleDragEnd(day.date, day.routePlanId)}
                 className="grid items-center px-4 py-3"
                 style={{
-                  gridTemplateColumns: '20px 28px 1fr 90px auto',
+                  gridTemplateColumns: '20px 28px 1fr auto',
                   gap: '10px',
                   borderTop: '1px solid #f0ece0',
                   background: isActive ? '#ece7d9' : '#ffffff',
@@ -222,21 +213,6 @@ export default function RoutesClient({ days: initialDays }: { days: RouteDay[] }
                     </p>
                   )}
                 </div>
-
-                <input
-                  type="time"
-                  value={stop.scheduledTime ?? ''}
-                  onChange={e => updateTime(day.date, idx, e.target.value)}
-                  style={{
-                    background: '#f5f2ea',
-                    border: '1px solid #c8c4b8',
-                    color: '#0a0a0a',
-                    padding: '5px 7px',
-                    fontSize: '12px',
-                    outline: 'none',
-                    width: '100%',
-                  }}
-                />
 
                 <div className="flex items-center gap-1.5 shrink-0">
                   <a
