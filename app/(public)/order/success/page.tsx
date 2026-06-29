@@ -72,7 +72,7 @@ export default async function OrderSuccessPage({
           </p>
           <ul style={{ display: 'flex', flexDirection: 'column', gap: 8, listStyle: 'none', padding: 0, margin: 0 }}>
             <li className="t-body-sm">✓ Check your email for a Square receipt</li>
-            <li className="t-body-sm">✓ We&apos;ll reach out within 2 hours to confirm details</li>
+            <li className="t-body-sm">✓ We&apos;ll reach out shortly to confirm details</li>
             <li className="t-body-sm">✓ Pickup or delivery arranged by our team</li>
             <li className="t-body-sm">✓ Keep refrigerated — enjoy within 2 days</li>
           </ul>
