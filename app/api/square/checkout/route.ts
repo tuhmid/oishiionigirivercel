@@ -47,6 +47,14 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    const formatPhone = (p: string) => {
+      const digits = p.replace(/\D/g, '')
+      if (digits.length === 10) return `+1${digits}`
+      if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`
+      return null
+    }
+    const formattedPhone = customer_phone ? formatPhone(customer_phone) : null
+
     const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_URL
 
     const result = await squareClient.checkout.paymentLinks.create({
@@ -71,7 +79,7 @@ export async function POST(req: NextRequest) {
       },
       prePopulatedData: {
         ...(customer_email ? { buyerEmail: customer_email } : {}),
-        ...(customer_phone ? { buyerPhoneNumber: customer_phone } : {}),
+        ...(formattedPhone ? { buyerPhoneNumber: formattedPhone } : {}),
         ...(customer_name ? {
           buyerAddress: {
             firstName: customer_name.split(' ').slice(0, -1).join(' ') || customer_name,
