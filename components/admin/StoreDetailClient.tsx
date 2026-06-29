@@ -722,15 +722,32 @@ export default function StoreDetailClient({ store, flavors, batches, scheduleRem
                           </span>
                     )}
                   </div>
-                  <div className="text-right shrink-0">
-                    <div className="text-sm font-mono" style={{ color: '#0a0a0a' }}>
-                      {totalDelivered} delivered
-                    </div>
-                    {batch.status !== 'delivered' && (
-                      <div className="text-sm font-mono" style={{ color: '#2a7a2a' }}>
-                        {totalSold} sold
+                  <div className="flex items-center gap-4 shrink-0">
+                    <div className="text-right">
+                      <div className="text-sm font-mono" style={{ color: '#0a0a0a' }}>
+                        {totalDelivered} delivered
                       </div>
-                    )}
+                      {batch.status !== 'delivered' && (
+                        <div className="text-sm font-mono" style={{ color: '#2a7a2a' }}>
+                          {totalSold} sold
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      title="Delete batch"
+                      onClick={async () => {
+                        if (!window.confirm('Delete this batch? This cannot be undone.')) return
+                        const supabase = createClient()
+                        await supabase.from('batches').delete().eq('id', batch.id)
+                        router.refresh()
+                      }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c8c4b8', padding: 4, display: 'flex', alignItems: 'center' }}
+                      onMouseEnter={e => (e.currentTarget.style.color = '#e63946')}
+                      onMouseLeave={e => (e.currentTarget.style.color = '#c8c4b8')}
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   </div>
                 </div>
                 {/* Flavor breakdown grid */}
