@@ -10,7 +10,8 @@ export function formatCurrency(amount: number) {
 }
 
 export function formatDate(date: string) {
-  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(date))
+  const [year, month, day] = date.split('-').map(Number)
+  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(year, month - 1, day))
 }
 
 export function getDayKey(date: Date) {
