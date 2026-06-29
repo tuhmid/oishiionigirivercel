@@ -26,7 +26,8 @@ export interface RouteDay {
 }
 
 function dayLabel(dateStr: string) {
-  return new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  return new Date(year, month - 1, day).toLocaleDateString('en-US', {
     weekday: 'long', month: 'short', day: 'numeric',
   })
 }
@@ -153,7 +154,8 @@ export default function RoutesClient({ days: initialDays }: { days: RouteDay[] }
           </div>
 
           {day.stops.map((stop, idx) => {
-            const jsDay = new Date(day.date + 'T12:00:00')
+            const [dy, dm, dd] = day.date.split('-').map(Number)
+            const jsDay = new Date(dy, dm - 1, dd)
               .toLocaleDateString('en-US', { weekday: 'short' })
               .toLowerCase()
               .slice(0, 3)
