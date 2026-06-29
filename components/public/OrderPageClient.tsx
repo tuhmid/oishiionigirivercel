@@ -61,16 +61,17 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
   const handleCheckout = async () => {
     setError(null)
 
+    if (fulfillment === 'delivery') {
+      window.location.href = 'https://oishiionigirinyc.square.site/'
+      return
+    }
+
     if (!form.name.trim()) {
       setError('Please enter your name.')
       return
     }
     if (!form.email.trim()) {
       setError('Please enter your email.')
-      return
-    }
-    if (fulfillment === 'delivery' && !form.address.trim()) {
-      setError('Please enter your delivery address.')
       return
     }
 
@@ -581,7 +582,7 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
               disabled={total === 0 || loading}
               onClick={handleCheckout}
             >
-              {loading ? '' : `Checkout — $${total.toFixed(2)}`}
+              {loading ? '' : fulfillment === 'delivery' ? 'Order Delivery via Square →' : `Checkout — $${total.toFixed(2)}`}
             </button>
 
             <p
