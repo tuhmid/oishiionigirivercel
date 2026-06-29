@@ -122,7 +122,15 @@ export default async function InvoicePrintPage({ params }: { params: Promise<{ i
           </div>
         )}
 
-        <div className="r-footer">
+        <hr className="r-divider" style={{ marginTop: 32 }} />
+
+        <div style={{ marginTop: 24, maxWidth: 260 }}>
+          <p style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#666', marginBottom: 28 }}>Store Signature</p>
+          <div style={{ borderBottom: '1px solid #000', marginBottom: 6 }} />
+          <p style={{ fontSize: 10, color: '#666' }}>Signature</p>
+        </div>
+
+        <div className="r-footer" style={{ marginTop: 32 }}>
           OISHII ONIGIRI · Brooklyn, NY<br />
           oishiionigiri.com · Thank you!
         </div>

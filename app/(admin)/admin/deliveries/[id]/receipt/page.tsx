@@ -108,12 +108,7 @@ export default async function ReceiptPage({ params }: { params: Promise<{ id: st
 
         <div className="r-sig">
           <div className="r-sig-line" />
-          <p className="r-label">Store Signature / Date</p>
-        </div>
-
-        <div className="r-sig" style={{ marginTop: 24 }}>
-          <div className="r-sig-line" />
-          <p className="r-label">Driver Signature</p>
+          <p className="r-label">Store Signature</p>
         </div>
 
         <div className="r-footer">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { GripVertical, FileText, Receipt, Clock, MapPin } from 'lucide-react'
 
@@ -31,6 +32,7 @@ function dayLabel(dateStr: string) {
 
 export default function RoutesClient({ days: initialDays }: { days: RouteDay[] }) {
   const [days, setDays] = useState(initialDays)
+  const router = useRouter()
   const [dragging, setDragging] = useState<{ date: string; idx: number } | null>(null)
   const [saving, setSaving] = useState<string | null>(null)
 
@@ -194,7 +196,13 @@ export default function RoutesClient({ days: initialDays }: { days: RouteDay[] }
                 </span>
 
                 <div className="min-w-0">
-                  <p className="text-sm font-medium truncate" style={{ color: '#0a0a0a' }}>{stop.storeName}</p>
+                  <p
+                    className="text-sm font-medium truncate hover:underline"
+                    style={{ color: '#0a0a0a', cursor: 'pointer' }}
+                    onClick={e => { e.stopPropagation(); router.push(`/admin/deliveries/${stop.batchId}`) }}
+                  >
+                    {stop.storeName}
+                  </p>
                   {stop.address && (
                     <p className="flex items-center gap-1 text-xs mt-0.5 truncate" style={{ color: '#777777' }}>
                       <MapPin size={10} style={{ flexShrink: 0 }} />
