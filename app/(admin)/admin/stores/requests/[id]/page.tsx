@@ -127,15 +127,7 @@ export default function RequestDetailPage() {
             >
               {acting ? '...' : 'Approve & Create Store'}
             </button>
-            <button
-              onClick={() => updateStatus('reviewed')}
-              disabled={acting}
-              className="px-4 py-2 text-xs tracking-widest uppercase font-semibold disabled:opacity-40"
-              style={{ background: '#f5f2ea', color: '#0a0a0a', border: '1px solid #c8c4b8' }}
-            >
-              Mark Reviewed
-            </button>
-            <button
+<button
               onClick={() => updateStatus('rejected')}
               disabled={acting}
               className="px-4 py-2 text-xs tracking-widest uppercase font-semibold disabled:opacity-40"
