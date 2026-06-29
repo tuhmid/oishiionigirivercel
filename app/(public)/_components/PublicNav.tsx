@@ -70,7 +70,7 @@ export default function PublicNav() {
               rel="noopener noreferrer"
               className="pub-nav-link"
             >
-              Location
+              Locations
             </a>
           </div>
 
