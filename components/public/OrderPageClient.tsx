@@ -224,7 +224,26 @@ export default function OrderPageClient({ flavors }: { flavors: EnrichedFlavor[]
       {/* ── Fulfillment choice modal ── */}
       {!fulfillmentChosen && (
         <div className="fulfillment-modal-overlay">
-          <div className="fulfillment-modal">
+          <div className="fulfillment-modal" style={{ position: 'relative' }}>
+            <button
+              type="button"
+              onClick={() => setFulfillmentChosen(true)}
+              aria-label="Close"
+              style={{
+                position: 'absolute',
+                top: 12,
+                right: 12,
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: 22,
+                lineHeight: 1,
+                color: 'var(--ink-40)',
+                padding: '4px 8px',
+              }}
+            >
+              ×
+            </button>
             <img
               src="/logo.png"
               alt=""
