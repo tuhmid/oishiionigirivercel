@@ -95,7 +95,7 @@ export default function WholesaleForm() {
       cert_authority_number: form.certAuthorityNumber || null,
       resale_cert_url: resaleCertUrl,
       message: form.message || null,
-      status: 'pending',
+      status: 'new',
     })
 
     setSubmitting(false)
